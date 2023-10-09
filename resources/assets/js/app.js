@@ -19,6 +19,8 @@ window.Vue = require('vue');
  */
 Vue.component('categoria', require('./components/Categoria.vue'));
 Vue.component('articulo', require('./components/Articulo.vue'));
+Vue.component('catropa', require('./components/CatRopa.vue'));
+Vue.component('tallaropa', require('./components/Talla.vue'));
 Vue.component('cliente', require('./components/Cliente.vue'));
 Vue.component('rol', require('./components/Rol.vue'));
 Vue.component('user', require('./components/User.vue'));

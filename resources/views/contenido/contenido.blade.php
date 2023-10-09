@@ -10,11 +10,15 @@
             <template v-if="menu==2">
                 <linea></linea>
             </template>
+
             <template v-if="menu==3">
                 <ropa></ropa>
             </template>
             <template v-if="menu==4">
-                <catRopa></catRopa>
+                <catropa></catropa>
+            </template>
+            <template v-if="menu==7">
+                <tallaropa></tallaropa>
             </template>
 
             

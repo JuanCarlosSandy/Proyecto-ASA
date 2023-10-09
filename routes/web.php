@@ -40,6 +40,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/producto/actualizar', 'ProductoController@update');
         Route::delete('/producto/eliminar/{id}', 'ProductoController@eliminar');
         Route::get('/producto/obtenerDatosCategoria', 'ProductoController@obtenerDatosCategoria');
+
+        Route::get('/categoriaropa', 'CategoriaRopaController@index');
+        Route::post('/categoriaropa/registrar', 'CategoriaRopaController@store');
+        Route::put('/categoriaropa/actualizar', 'CategoriaRopaController@update');
+        Route::get('/categoriaropa/selectCategoria', 'CategoriaRopaController@selectCategoria');
+
+        Route::get('/tallaropa', 'TallaRopaController@index');
+        Route::post('/tallaropa/registrar', 'TallaRopaController@store');
+        Route::put('/tallaropa/actualizar', 'TallaRopaController@update');
+        Route::get('/tallaropa/selectTalla', 'TallaRopaController@selectTalla');
+
         
         //Rutas de configuracion de trabajo
         Route::get('/configuracion/editar', 'ConfiguracionTrabajoController@edit');
