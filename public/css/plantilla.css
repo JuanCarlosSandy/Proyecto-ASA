@@ -7654,7 +7654,7 @@ base-chart.chart {
   height: 55px;
   padding: 0;
   margin: 0;
-  background-color: #224015;
+  background-color: #71AB57;
   border-bottom: 1px solid #c2cfd6; }
   .app-header.navbar .navbar-brand {
     display: inline-block;
@@ -7663,9 +7663,9 @@ base-chart.chart {
     padding: 0.5rem 1rem;
     margin-right: 0;
     background-color: #fff;
-    background-image: url("../img/logoasagrande.png");
+    background-image: url("../img/logocodensapng.png");
     background-color: transparent;
-    background-image: url("../img/logoasagrande.png");
+    background-image: url("../img/logocodensapng.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 100px auto;
@@ -7757,7 +7757,7 @@ base-chart.chart {
   .brand-minimized .app-header.navbar .navbar-brand {
     width: 50px;
     background-color: #fff;
-    background-image: url("../img/logoASA.jpg");
+    background-image: url("../img/logo-symbol.png");
     background-size: 24px;
     border-bottom: 1px solid #c2cfd6; } }
 
@@ -7780,7 +7780,7 @@ base-chart.chart {
   padding: 0;
   color: #fff;
   font-size: 14px;
-  background: #858319;
+  background: #48852E;
  }
   .sidebar .sidebar-close {
     position: absolute;
