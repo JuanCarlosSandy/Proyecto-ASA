@@ -236,6 +236,7 @@ methods : {
                     case 'actualizar':
                     {
                         //console.log(data);
+                        console.log("talla id ="+data['id']);
                         this.modal=1;
                         this.tituloModal='Actualizar Talla';
                         this.tipoAccion=2;

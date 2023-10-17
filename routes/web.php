@@ -11,6 +11,9 @@
 |
 */
 
+use App\Http\Controllers\RopaController;
+use Illuminate\Support\Facades\Route;
+
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/', 'Auth\LoginController@showLoginForm');
     Route::post('/', 'Auth\LoginController@login')->name('login');
@@ -34,6 +37,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/categoria/desactivar', 'CategoriaAlimentosController@desactivar');
         Route::put('/categoria/activar', 'CategoriaAlimentosController@activar');
         Route::get('/categoria/selectCategoria', 'CategoriaAlimentosController@selectCategoria');
+        
+        Route::get('/ropa', 'RopaController@index');
+        Route::get('/ropa/obtenerDatosTalla', 'RopaController@obtenerDatosTallas');
+        Route::get('/ropa/obtenerDatosCategoriaRopa', 'RopaController@obtenerDatosCategoriaRopa');
+        Route::post('/ropa/registrar', 'RopaController@store');
+        Route::put('/ropa/actualizar', 'RopaController@update');
+        Route::delete('/ropa/eliminar/{id}', 'RopaController@eliminar');
 
         Route::get('/producto', 'ProductoController@index');
         Route::post('/producto/registrar', 'ProductoController@store');
@@ -73,6 +83,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/user/activar', 'UserController@activar');
         Route::get('/user/listarReporteUsuariosExcel', 'UserController@listarReporteUsuariosExcel');
 
+        
+        
         //Rura para que el usuario pueda editar su perfil
         Route::get('/user/editarpersona', 'UserController@editarPersona');
         //Route::put('/editarperfil', 'UserController@editarPerfil');

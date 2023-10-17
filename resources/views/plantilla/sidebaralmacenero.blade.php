@@ -11,21 +11,26 @@
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> Almacén</a>
                         <ul class="nav-dropdown-items">
                             <li @click="menu=1" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Categorías</a>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Productos</a>
                             </li>
                             <li @click="menu=2" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Artículos</a>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Categorias Productos</a>
+                            </li>
+                            <li @click="menu=3" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Ropa - Vestimenta</a>
+                            </li>
+
+                            <li @click="menu=4" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Categoria Ropa</a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">
-                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Compras</a>
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Proveedores</a>
                         <ul class="nav-dropdown-items">
-                            <li @click="menu=3" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-wallet"></i> Ingresos</a>
-                            </li>
-                            <li @click="menu=4" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-notebook"></i> Proveedores</a>
+                            
+                            <li @click="menu" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-notebook"></i> Registrar proveedores</a>
                             </li>
                         </ul>
                     </li>
@@ -37,12 +42,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li @click="menu=11" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-book-open"></i> Ayuda <span class="badge badge-danger">PDF</span></a>
-                    </li>
-                    <li @click="menu=12" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-info"></i> Acerca de...<span class="badge badge-info">IT</span></a>
-                    </li>
+                    
                 </ul>
             </nav>
             <button class="sidebar-minimizer brand-minimizer" type="button"></button>

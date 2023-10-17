@@ -60,6 +60,7 @@
                                         v-if="persona.fotografia" ref="imagen"-->
                                     <img :src="'img/usuarios/' + 'defecto.jpg'" width="50" height="50" v-else ref="imagen">
                                 </td>
+                                
                                 <td v-text="persona.nombre"></td>
                                 <td v-text="persona.tipo_documento"></td>
                                 <td v-text="persona.num_documento"></td>
@@ -301,6 +302,7 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+            
         },
         selectRol() {
             let me = this;
@@ -373,7 +375,7 @@ export default {
             formData.append('telefono', this.telefono);
             formData.append('email', this.email);
             formData.append('idrol', this.idrol);
-            formData.append('idsucursal', this.idsucursal);
+            //formData.append('idsucursal', this.idsucursal);
             formData.append('usuario', this.usuario);
             formData.append('password', this.password);
             formData.append('fotografia', this.fotografia);
@@ -387,14 +389,16 @@ export default {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-
             }).then(function (response) {
                 me.cerrarModal();
-                me.listarPersona(1, '', 'nombre');
+                me.listarPersona(0, '', 'nombre');
             }).catch(function (error) {
                 console.log(error);
             });
-
+            console.log('Datos en el FormData:');
+            console.log('Nombre: ' + formData.get('nombre'));
+            console.log('Tipo de documento: ' + formData.get('tipo_documento'));
+            console.log('Número de documento: ' + formData.get('num_documento'));
         },
         actualizarPersona() {
             if (this.validarPersona()) {
@@ -411,7 +415,7 @@ export default {
             formData.append('telefono', this.telefono);
             formData.append('email', this.email);
             formData.append('idrol', this.idrol);
-            formData.append('idsucursal', this.idsucursal);
+            //formData.append('idsucursal', this.idsucursal);
             formData.append('usuario', this.usuario);
             formData.append('password', this.password);
             formData.append('fotografia', this.fotografia);
@@ -428,6 +432,11 @@ export default {
             }).catch(function (error) {
                 console.log(error);
             });
+            console.log('Datos en el FormData:');
+            console.log('ID PERSONA: ' + formData.get('id'));
+            console.log('Nombre: ' + formData.get('nombre'));
+            console.log('Tipo de documento: ' + formData.get('tipo_documento'));
+            console.log('Número de documento: ' + formData.get('num_documento'));
         },
         validarPersona() {
             this.errorPersona = 0;
@@ -464,7 +473,7 @@ export default {
         },
         abrirModal(modelo, accion, data = []) {
             this.selectRol();
-            this.selectSucursal();
+            //this.selectSucursal();
             switch (modelo) {
                 case "persona":
                     {
@@ -489,7 +498,9 @@ export default {
                                 }
                             case 'actualizar':
                                 {
-                                    //console.log(data['fotografia']);
+                                    console.log("persona "+data['id']);
+                                    console.log("nombre"+ data['nombre']);
+                                    console.log("id rol "+data['idrol']);
                                     this.modal = 1;
                                     this.tituloModal = 'Actualizar Usuario';
                                     this.tipoAccion = 2;
