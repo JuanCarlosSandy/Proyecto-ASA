@@ -12,6 +12,7 @@ use App\User;
 use App\Persona;
 use App\Sucursal;
 use App\Exports\UserExport;
+use Exception;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -26,8 +27,8 @@ class UserController extends Controller
         if ($buscar==''){
             $personas = User::join('personas','users.id','=','personas.id')
             ->join('roles','users.idrol','=','roles.id')
-            ->join('sucursales','users.idsucursal','=','sucursales.id')
-            ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email','personas.fotografia','users.usuario','users.password','users.condicion','users.idrol','roles.nombre as rol', 'users.idsucursal', 'sucursales.nombre as sucursal')
+            
+            ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email','personas.fotografia','users.usuario','users.password','users.condicion','users.idrol','roles.nombre as rol')
             ->orderBy('personas.id', 'desc')->paginate(3);
         }
         else{
@@ -55,22 +56,20 @@ class UserController extends Controller
         if (!$request->ajax()) return redirect('/');
 
         try{
-            DB::beginTransaction();
 
             $persona = new Persona();
-            $persona->nombre = $request->nombre;
-            $persona->tipo_documento = $request->tipo_documento;
-            $persona->num_documento = $request->num_documento;
-            $persona->direccion = $request->direccion;
-            $persona->telefono = $request->telefono;
-            $persona->email = $request->email;
-            
+            $persona->nombre = $request->input('nombre');
+            $persona->tipo_documento = $request->input('tipo_documento');
+            $persona->num_documento = $request->input('num_documento');
+            $persona->direccion = $request->input('direccion');
+            $persona->telefono = $request->input('telefono');
+            $persona->email = $request->input('email');
             if($request->hasFile('fotografia'))
             {
                 if($request->hasFile('fotografia'))
                 {
                     $imagen = $request->file("fotografia");
-                    $nombreimagen = Str::slug($request->nombre).".".$imagen->guessExtension();
+                    $nombreimagen = Str::slug($request->input('nombre')).".".$imagen->guessExtension();
                     $ruta = public_path("img/usuarios/");
 
                     // Crear el directorio si no existe
@@ -84,21 +83,18 @@ class UserController extends Controller
                     $persona->fotografia = $nombreimagen;
                 }
             }
-
             $persona->save();
 
             $user = new User();
             $user->id = $persona->id;
-            $user->idrol = $request->idrol;
-            $user->idsucursal = $request->idsucursal;
-            $user->usuario = $request->usuario;
-            $user->password = bcrypt( $request->password);
-            $user->condicion = '1';            
-            $user->save();
-
-            DB::commit();
+            $user->idrol = $request->input('idrol');
+            //$user->idsucursal = '1';
+            $user->usuario = $request->input('usuario');
+            $user->password = bcrypt( $request->input('password'));
+            $user->condicion = 1;            
+            $user->save();  
         } catch (Exception $e){
-            DB::rollBack();
+            //DB::rollBack();
         }
     }
 
@@ -109,14 +105,14 @@ class UserController extends Controller
         try{
             DB::beginTransaction();
 
-            $user = User::findOrFail($request->id);
+            $user = User::findOrFail($request->input('id'));
             $persona = Persona::findOrFail($user->id);
-            $persona->nombre = $request->nombre;
-            $persona->tipo_documento = $request->tipo_documento;
-            $persona->num_documento = $request->num_documento;
-            $persona->direccion = $request->direccion;
-            $persona->telefono = $request->telefono;
-            $persona->email = $request->email;
+            $persona->nombre = $request->input('nombre');
+            $persona->tipo_documento = $request->input('tipo_documento');
+            $persona->num_documento = $request->input('num_documento');
+            $persona->direccion = $request->input('direccion');
+            $persona->telefono = $request->input('telefono');
+            $persona->email = $request->input('email');
 
             
             $nombreimagen = "";
@@ -128,7 +124,7 @@ class UserController extends Controller
                 }
 
                 $imagen = $request->file("fotografia");
-                $nombreimagen = Str::slug($request->nombre).".".$imagen->guessExtension();
+                $nombreimagen = Str::slug($request->input('nombre')).".".$imagen->guessExtension();
                 $imagen->storeAs('public/img/usuarios', $nombreimagen);
 
                 $ruta = public_path("img/usuarios/");
@@ -141,34 +137,32 @@ class UserController extends Controller
             }
             
             Log::info('Datos actualizados', [
-                'nombre' => $request->nombre, 
-                'tipo_documento' => $request->tipo_documento,
-                'num_documento' => $request->num_documento,
-                'direccion' => $request->direccion,
-                'telefono' => $request->telefono,
-                'email' => $request->email,
+                'nombre' => $request->input('nombre'), 
+                'tipo_documento' => $request->input('tipo_documento'),
+                'num_documento' => $request->input('num_documento'),
+                'direccion' => $request->input('direccion'),
+                'telefono' => $request->input('telefono'),
+                'email' => $request->input('email'),
                 'fotografia' => $nombreimagen,
-                'usuario' => $request->usuario,
-                'password' => $request->password,
-                'idrol' => $request->idrol,
-                'id' => $request->id
+                'usuario' => $request->input('usuario'),
+                'password' => $request->input('password'),
+                'idrol' => $request->input('idrol'),
+                'id' => $request->input('id')
                 
             ]);
 
 
             $persona->save();
             
-            $user->usuario = $request->usuario;
-            $user->password = bcrypt($request->password);
+            $user->usuario = $request->input('usuario');
+            $user->password = bcrypt($request->input('password'));
             $user->condicion = '1';
             
-            if($request->idrol != ''){
-                $user->idrol = $request->idrol;
+            if($request->input('idrol') != ''){
+                $user->idrol = $request->input('idrol');
             }
 
-            if($request->idsucursal != ''){
-                $user->idsucursal = $request->idsucursal;
-            }
+            
             
             $user->save();
 
@@ -205,10 +199,11 @@ class UserController extends Controller
 
         $persona = User::join('personas','users.id','=','personas.id')
             ->join('roles','users.idrol','=','roles.id')
-            ->join('sucursales','users.idsucursal','=','sucursales.id')
-            ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email','personas.fotografia','users.usuario','users.password','users.condicion','users.idrol','roles.nombre as rol', 'users.idsucursal', 'sucursales.nombre as sucursal')
-            ->where('personas.id', $request->id);
     
-        return ['persona' => $persona->first()];
+            ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email','personas.fotografia','users.usuario','users.password','users.condicion','users.idrol','roles.nombre as rol')
+            ->where('personas.id', $request->input('id'))
+            ->first();
+    
+        return ['persona' => $persona];
     }
 }

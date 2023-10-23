@@ -37,10 +37,9 @@
                                 <div class="form-group">
                                     <label class="form-control-label" for="text-input">Tipo documento</label>
                                     <select v-model="tipo_documento" class="form-control">
-                                        <option value="DNI">DNI</option>
-                                        <option value="RUC">RUC</option>
+                                        
                                         <option value="CEDULA">CEDULA</option>
-                                        <option value="PASS">PASS</option>
+                                        <option value="PASS">PASAPORTE</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -111,6 +110,7 @@ export default {
             errorPersona: 0,
             errorMostrarMsjPersona: [],
             id: '',
+            validEmail: true
         }
     },
     computed: {
@@ -141,7 +141,7 @@ export default {
 
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
-                console.log(respuesta);
+                console.log("respuesta"+respuesta);
 
                 me.persona_id = respuesta.persona.id;
                 me.nombre = respuesta.persona.nombre;
@@ -155,10 +155,12 @@ export default {
                 me.fotografia = respuesta.persona.fotografia;
                 me.fotoMuestra = respuesta.persona.fotografia ? 'img/usuarios/'+respuesta.persona.fotografia + '?t=' + new Date().getTime() : 'img/usuarios/defecto.jpg';
                 me.idrol = respuesta.persona.idrol;
+                console.log('fotografia: ' +respuesta.persona.fotografia);
             })
                 .catch(function (error) {
                     console.log(error);
                 });
+            
         },
         actualizarPersona() {
 
@@ -228,13 +230,18 @@ export default {
         validarPersona() {
             this.errorPersona = 0;
             this.errorMostrarMsjPersona = [];
-
+            this.validateEmail()
             if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la pesona no puede estar vacío.");
             if (!this.usuario) this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
             if (!this.password) this.errorMostrarMsjPersona.push("La password del usuario no puede estar vacía.");
+            if(!this.validEmail) this.errorMostrarMsjPersona.push("El correo debe contener @");
             if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
             return this.errorPersona;
+        },
+        validateEmail() {
+        const re =/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        this.validEmail = re.test(this.email);
         },
     },
     mounted() {
