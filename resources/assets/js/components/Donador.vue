@@ -8,7 +8,7 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Usuarios
+                    <i class="fa fa-align-justify"></i> Donadores
                     <button type="button" @click="abrirModal('persona', 'registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
@@ -38,28 +38,20 @@
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                             <tr>
-                                <th>Foto</th>
+                                
                                 <th>Nombre</th>
                                 <th>Tipo Documento</th>
                                 <th>Número</th>
                                 <th>Dirección</th>
                                 <th>Teléfono</th>
                                 <th>Email</th>
-                                <th>Usuario</th>
-                                <th>Rol</th>
-                                <th>Sucursal</th>
+                                
                                 <th>Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="persona in arrayPersona" :key="persona.id">
-                                <td class="text-center">
-                                    <img :src="'img/usuarios/' + persona.fotografia + '?t=' + new Date().getTime()" width="50" height="50"
-                                        v-if="persona.fotografia" ref="imagen">
-                                    <!--img :src="'img/usuarios/' + persona.fotografia" width="50" height="50"
-                                        v-if="persona.fotografia" ref="imagen"-->
-                                    <img :src="'img/usuarios/' + 'defecto.jpg'" width="50" height="50" v-else ref="imagen">
-                                </td>
+                                
                                 
                                 <td v-text="persona.nombre"></td>
                                 <td v-text="persona.tipo_documento"></td>
@@ -67,9 +59,7 @@
                                 <td v-text="persona.direccion"></td>
                                 <td v-text="persona.telefono"></td>
                                 <td v-text="persona.email"></td>
-                                <td v-text="persona.usuario"></td>
-                                <td v-text="persona.rol"></td>
-                                <td v-text="persona.sucursal"></td>
+                                
                                 <td>
                                     <button type="button" @click="abrirModal('persona', 'actualizar', persona)"
                                         class="btn btn-warning btn-sm">
@@ -142,19 +132,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="email-input">Teléfono</label>
-                                <input type="email" v-model="telefono" class="form-control" placeholder="Teléfono">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="email-input">Rol</label>
-                                <select v-model="idrol" class="form-control">
-                                    <option value="0" disabled>Seleccione</option>
-                                    <option v-for="role in arrayRol" :key="role.id" :value="role.id"
-                                        v-text="role.nombre"></option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="email-input">Usuario</label>
-                                <input type="text" v-model="usuario" class="form-control" placeholder="Nombre del usuario">
+                                <input type="number" v-model="telefono" class="form-control" placeholder="Teléfono">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -170,32 +148,6 @@
                             <div class="form-group">
                                 <label class="form-control-label" for="email-input">Email</label>
                                 <input type="email" v-model="email" class="form-control" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="email-input">Sucursal</label>
-                                <select v-model="idsucursal" class="form-control">
-                                    <option value="0" disabled>Seleccione</option>
-                                    <option v-for="sucursal in arraySucursal" :key="sucursal.id" :value="sucursal.id"
-                                        v-text="sucursal.nombre"></option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="email-input">Clave</label>
-                                <input type="password" v-model="password" class="form-control" placeholder="Clave del usuario">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-control-label" for="email-input">Fotografia</label>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <input type="file" @change="obtenerFotografia" class="form-control" placeholder="fotografia usuario" ref="fotografiaInput">
-                            </div>
-                            <div class="col-md-4">
-                                <figure>
-                                    <img :src="imagen" width="50" height="50" alt="Foto usuario">
-                                </figure>
                             </div>
                         </div>
                     </div>
@@ -223,22 +175,15 @@
 export default {
     data() {
         return {
+            idDonador: 0,
             persona_id: 0,
             nombre: '',
             tipo_documento: '',
             num_documento: '',
             direccion: '',
-            telefono: '',
+            telefono: 0,
             email: '',
-            usuario: '',
-            password: '',
-            fotografia: '',
-            fotoMuestra: '',
-            idrol: '',
-            idsucursal: '',
             arrayPersona: [],
-            arrayRol: [],
-            arraySucursal: [],
             modal: 0,
             tituloModal: '',
             tipoAccion: 0,
@@ -293,7 +238,7 @@ export default {
     methods: {
         listarPersona(page, buscar, criterio) {
             let me = this;
-            var url = '/user?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+            var url = '/donador?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 me.arrayPersona = respuesta.personas.data;
@@ -367,25 +312,19 @@ export default {
 
             let me = this;
             let formData = new FormData();
-
             formData.append('nombre', this.nombre);
             formData.append('tipo_documento', this.tipo_documento);
             formData.append('num_documento', this.num_documento);
             formData.append('direccion', this.direccion);
             formData.append('telefono', this.telefono);
             formData.append('email', this.email);
-            formData.append('idrol', this.idrol);
-            //formData.append('idsucursal', this.idsucursal);
-            formData.append('usuario', this.usuario);
-            formData.append('password', this.password);
-            formData.append('fotografia', this.fotografia);
 
             /*for (let [key, value] of formData.entries()) 
             {
                 console.log(key, value);
             }*/
 
-            axios.post('/user/registrar', formData, {
+            axios.post('/donador/registrar', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -396,32 +335,31 @@ export default {
                 console.log(error);
             });
             console.log('Datos en el FormData:');
-            console.log('Nombre: ' + formData.get('nombre'));
-            console.log('Tipo de documento: ' + formData.get('tipo_documento'));
-            console.log('Número de documento: ' + formData.get('num_documento'));
+            console.log('ID DONADOR: ' + formData.get('id') +typeof this.idDonador);
+            console.log('Nombre: ' + formData.get('nombre')+typeof this.nombre);
+            console.log('Tipo de documento: ' + formData.get('tipo_documento')+ typeof this.tipo_documento);
+            console.log('Número de documento: ' + formData.get('num_documento') + typeof this.num_documento);
+            console.log('direccion '+formData.get('direccion')+ typeof this.direccion);
+            console.log('telefono '+formData.get('telefono')+ typeof this.telefono);
+            console.log('email ',formData.get('email') +typeof this.email);
+            console.log('ID PERSONA: '+ this.persona_id +typeof this.persona_id)
         },
         actualizarPersona() {
             if (this.validarPersona()) {
                 return;
             }
-
-            console.log(this.fotografia);
             let me = this;
             let formData = new FormData();
-            formData.append('nombre', this.nombre);
-            formData.append('tipo_documento', this.tipo_documento);
-            formData.append('num_documento', this.num_documento);
-            formData.append('direccion', this.direccion);
-            formData.append('telefono', this.telefono);
-            formData.append('email', this.email);
-            formData.append('idrol', this.idrol);
-            //formData.append('idsucursal', this.idsucursal);
-            formData.append('usuario', this.usuario);
-            formData.append('password', this.password);
-            formData.append('fotografia', this.fotografia);
-            formData.append('id', this.persona_id);
+            formData.append('nombre', this.nombre );
+            formData.append('tipo_documento', this.tipo_documento );
+            formData.append('num_documento', this.num_documento );
+            formData.append('direccion', this.direccion );
+            formData.append('telefono', this.telefono );
+            formData.append('email', this.email );
+            formData.append('id', this.idDonador );
+            formData.append('idPersona',this.persona_id)
 
-            axios.post('/user/actualizar', formData, {
+            axios.post('/donador/actualizar', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -433,28 +371,26 @@ export default {
                 console.log(error);
             });
             console.log('Datos en el FormData:');
-            console.log('ID PERSONA: ' + formData.get('id'));
-            console.log('Nombre: ' + formData.get('nombre'));
-            console.log('Tipo de documento: ' + formData.get('tipo_documento'));
-            console.log('Número de documento: ' + formData.get('num_documento'));
+            console.log('ID DONADOR: ' + formData.get('id') +typeof this.idDonador);
+            console.log('Nombre: ' + formData.get('nombre')+typeof this.nombre);
+            console.log('Tipo de documento: ' + formData.get('tipo_documento')+ typeof this.tipo_documento);
+            console.log('Número de documento: ' + formData.get('num_documento') + typeof this.num_documento);
+            console.log('direccion '+formData.get('direccion')+ typeof this.direccion);
+            console.log('telefono '+formData.get('telefono')+ typeof this.telefono);
+            console.log('email ',formData.get('email') +typeof this.email);
+            console.log('ID PERSONA: '+ this.persona_id +typeof this.persona_id)
         },
         validarPersona() {
             this.errorPersona = 0;
             this.errorMostrarMsjPersona = [];
 
             if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la pesona no puede estar vacío.");
-            if (!this.usuario) this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
-            if (!this.password) this.errorMostrarMsjPersona.push("La password del usuario no puede estar vacía.");
-            if (this.idrol == 0) this.errorMostrarMsjPersona.push("Seleccione una Role.");
             if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
             return this.errorPersona;
         },
         cerrarModal() {
             //Usando referencia en el file para limpiarlo al cerrar el modal
-            let fileInput = this.$refs.fotografiaInput;
-            fileInput.value = '';
-
             this.modal = 0;
             this.tituloModal = '';
             this.nombre = '';
@@ -463,12 +399,6 @@ export default {
             this.direccion = '';
             this.telefono = '';
             this.email = '';
-            this.usuario = '';
-            this.password = '';
-            this.fotografia = fileInput; //Pasando el valor limpio de la referencia
-            this.fotoMuestra = 'img/usuarios/defecto.jpg';
-            this.idrol = 0;
-            this.idsucursal = 0;
             this.errorPersona = 0;
         },
         abrirModal(modelo, accion, data = []) {
@@ -481,7 +411,7 @@ export default {
                             case 'registrar':
                                 {
                                     this.modal = 1;
-                                    this.tituloModal = 'Registrar Usuario';
+                                    this.tituloModal = 'Registrar Donador';
                                     this.nombre = '';
                                     this.tipo_documento = 'DNI';
                                     this.num_documento = '';
@@ -500,7 +430,8 @@ export default {
                                 {
                                     console.log("persona "+data['id']);
                                     console.log("nombre"+ data['nombre']);
-                                    console.log("id rol "+data['idrol']);
+                                    console.log("id persona "+data['idrol']);
+                                    console.log("id donador "+ data ['idDonador'])
                                     this.modal = 1;
                                     this.tituloModal = 'Actualizar Usuario';
                                     this.tipoAccion = 2;
@@ -511,12 +442,7 @@ export default {
                                     this.direccion = data['direccion'];
                                     this.telefono = data['telefono'];
                                     this.email = data['email'];
-                                    this.usuario = data['usuario'];
-                                    this.password = data['password'];
-                                    this.fotografia = data['fotografia'];
-                                    this.fotoMuestra = data['fotografia'] ? 'img/usuarios/' + data['fotografia'] : 'img/usuarios/defecto.jpg';
-                                    this.idrol = data['idrol'];
-                                    this.idsucursal = data['idsucursal'];
+                                    this.idDonador = data ['idDonador'];
                                     break;
                                 }
                         }

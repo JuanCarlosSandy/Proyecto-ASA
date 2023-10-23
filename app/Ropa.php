@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ropa extends Model
 {
+    protected $table = 'ropas';
     protected $fillable =[
         'nombre_ropa','cantidad','sexo','idTalla','idEstacion'
     ];
@@ -16,5 +17,8 @@ class Ropa extends Model
     
     public function tallas(){
         return $this->belongsTo('App\TallaRopa');
+    }
+    public function donador(){
+        return $this->hasMany('App\Donador');
     }
 }
