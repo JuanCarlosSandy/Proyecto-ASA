@@ -20,8 +20,10 @@ class CreateRopasTable extends Migration
             $table->string('sexo');
             $table->integer('idTalla')->unsigned();
             $table->integer('idEstacion')->unsigned();
-            $table->foreign('idTalla')->references('id')->on('talla_ropas')->onDelete('cascade');
-            $table->foreign('idEstacion')->references('id')->on('categoria_ropas')->onDelete('cascade');
+            $table->string('talla');
+            $table->string('estacion');
+            //$table->foreign('idTalla')->references('id')->on('talla_ropas')->onDelete('cascade');
+            //$table->foreign('idEstacion')->references('id')->on('categoria_ropas')->onDelete('cascade');
             $table->timestamps();
         });
     }

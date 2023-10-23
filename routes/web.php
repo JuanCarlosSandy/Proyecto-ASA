@@ -60,6 +60,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/tallaropa/registrar', 'TallaRopaController@store');
         Route::put('/tallaropa/actualizar', 'TallaRopaController@update');
         Route::get('/tallaropa/selectTalla', 'TallaRopaController@selectTalla');
+        //Rutas donadores 
+        Route::get('/donador','DonadorController@index');
+        Route::post('/donador/registrar','DonadorController@store');
+        Route::post('/donador/actualizar', 'DonadorController@update');
 
         
         //Rutas de configuracion de trabajo

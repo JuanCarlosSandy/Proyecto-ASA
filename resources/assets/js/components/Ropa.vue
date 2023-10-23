@@ -106,6 +106,7 @@
                         <div class="form-group">
                             <label for="tipo_producto"><strong>Sexo</strong></label>
                             <select id="sexo" v-model="sexo" class="form-control">
+                                <option value="0" disabled>Selecciona un sexo</option>
                                 <option value="femenino">Femenino</option>
                                 <option value="masculino">Masculino</option>
                             </select>
@@ -114,14 +115,23 @@
                             <label for="tipo_producto"><strong>Talla</strong></label>
                             <select id="idTallas" v-model="idTallas" class="form-control">
                                 <option value="0" disabled>Selecciona una Talla</option>
-                                <option v-for="tallas in arrayTallas" :key="tallas.id" :value="tallas.id"  v-text="tallas.talla"></option>
+                                <option value="XS"> XS</option>
+                                <option value="S"> S</option>
+                                <option value="M"> M</option>
+                                <option value="L"> L</option>
+                                <option value="XL"> XL</option>
+
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="tipo_producto"><strong>Estacion</strong></label>
                             <select id="idCategoriaRopa" v-model="idCategoriaRopa" class="form-control">
-                                <option value="" disabled>Selecciona una Estacion</option>
-                                <option v-for="categoriaRopa in arrayCategoriaRopa" :key="categoriaRopa.id" :value="categoriaRopa.id" >{{ categoriaRopa.estacion }}</option>
+                                <option value="0" disabled>Selecciona una Estacion</option>
+                                <option value="Primavera">Primavera</option>
+                                <option value="Verano">Verano</option>
+                                <option value="Otoño">Otoño</option>
+                                <option value="Invierno">Invierno</option>
+
                             </select>
                         </div>
                         <div v-show="errorProducto" class="form-group row div-error">
@@ -363,30 +373,30 @@ export default {
                             this.tituloModal = 'Registrar Ropa - Vestimenta';
                             this.nombre_producto= '';
                             this.cantidad='';
-                            this.sexo='';
-                            this.idTallas=1;
-                            this.idCategoriaRopa='';
+                            this.sexo=0;
+                            this.idTallas=0;
+                            this.idCategoriaRopa=0;
                             this.tipoAccion = 1;
                             break;
                         }
                         case 'actualizar':
                         {
                             //console.log(data);
-                            /*console.log("id actualizar "+data['id'] + typeof data['id']);
+                            console.log("id actualizar "+data['id'] + typeof data['id']);
                             console.log("nombre"+ data['nombre_ropa'] + typeof data['nombre_ropa'] );
                             console.log("cantidad"+ data['cantidad'] + typeof data['cantidad']);
-                            console.log("tallas "+ data['idTallas'] + typeof data['idTallas']);
+                            console.log("tallas "+ data['talla'] + typeof data['talla']);
                             console.log("sexo"+ data['sexo'] + typeof data['sexo']);
-                            console.log("estacin" + data['estacion'] + typeof  data['estacion'])*/
+                            console.log("estacin" + data['estacion'] + typeof  data['estacion'])
                             this.modal=1;
                             this.tituloModal='Actualizar Ropa - Vestimenta';
                             this.tipoAccion=2;
                             this.id=data['id'];
                             this.nombre_producto = data['nombre_ropa'];
                             this.cantidad= data['cantidad'];
-                            this.idTallas= data['idTallas'];
+                            this.idTallas= data['talla'];
                             this.sexo=data['sexo'];
-                            this.idCategoriaRopa=data['idCategoriaRopas']
+                            this.idCategoriaRopa=data['estacion']
                             break;
                         }
                     }

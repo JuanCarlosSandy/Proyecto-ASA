@@ -18,9 +18,7 @@ class RopaController extends Controller
         $criterio = $request->criterio;
         
         if ($buscar==''){
-            $ropas = Ropa::join('talla_ropas','ropas.idTalla','=','talla_ropas.id')
-                        ->join('categoria_ropas','ropas.idEstacion',"=","categoria_ropas.id")
-                        ->select('ropas.id','ropas.nombre_ropa','ropas.cantidad','ropas.sexo','talla_ropas.talla as talla','talla_ropas.id as idTallas','categoria_ropas.estacion as estacion','categoria_ropas.id as idCategoriaRopas')
+            $ropas = Ropa::select('ropas.*')
                         ->orderBy('ropas.id', 'desc')->paginate(3);
         }
         else{
@@ -51,8 +49,8 @@ class RopaController extends Controller
         $ropa->nombre_ropa = $request->input('nombre_producto');
         $ropa->cantidad = $request->input('cantidad');
         $ropa->sexo = $request->input('sexo');
-        $ropa->idTalla = $request->input('idTallas');
-        $ropa->idEstacion = $request->input('idCategoriaRopa');
+        $ropa->talla = $request->input('idTallas');
+        $ropa->estacion = $request->input('idCategoriaRopa');
         $ropa->save();
     }
     public function obtenerDatosTallas(Request $request){
@@ -73,8 +71,8 @@ class RopaController extends Controller
         $ropa->nombre_ropa = $request->input('nombre_producto');
         $ropa->cantidad = $request->input('cantidad');
         $ropa->sexo = $request->input('sexo');
-        $ropa->idTalla = $request->input('idTallas');
-        $ropa->idEstacion = $request->input('idCategoriaRopa');
+        $ropa->talla = $request->input('idTallas');
+        $ropa->estacion = $request->input('idCategoriaRopa');
         $ropa->save();
         }
         catch (Exception $e){

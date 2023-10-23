@@ -7648,7 +7648,8 @@ base-chart.chart {
   height: 55px;
   padding: 0;
   margin: 0;
-  background-color: #71AB57;
+  /*background-color: #71AB57;*/
+  background-color: #9f7b24;
   border-bottom: 1px solid #c2cfd6; }
   .app-header.navbar .navbar-brand {
     display: inline-block;
@@ -7657,9 +7658,9 @@ base-chart.chart {
     padding: 0.5rem 1rem;
     margin-right: 0;
     background-color: #fff;
-    background-image: url("../img/logocodensapng.png");
+    background-image: url("../img/logoasagrande.png");
     background-color: transparent;
-    background-image: url("../img/logocodensapng.png");
+    background-image: url("../img/logoasagrande.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 100px auto;
@@ -7671,7 +7672,7 @@ base-chart.chart {
       background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%2329363d' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); }
   .app-header.navbar .navbar-toggler-icon {
     height: 23px;
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23536c79' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); }
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); }
   .app-header.navbar .navbar-nav {
     -ms-flex-direction: row;
         flex-direction: row;
@@ -7710,7 +7711,7 @@ base-chart.chart {
     color: #29363d; }
 
 .navbar-nav .nav-link, .navbar-nav .navbar .dropdown-toggle, .navbar .navbar-nav .dropdown-toggle {
-  color: #536c79; }
+  color: #fff; }
   .navbar-nav .nav-link:focus, .navbar-nav .navbar .dropdown-toggle:focus, .navbar .navbar-nav .dropdown-toggle:focus, .navbar-nav .nav-link:hover, .navbar-nav .navbar .dropdown-toggle:hover, .navbar .navbar-nav .dropdown-toggle:hover {
     color: #29363d; }
 
@@ -7751,7 +7752,7 @@ base-chart.chart {
   .brand-minimized .app-header.navbar .navbar-brand {
     width: 50px;
     background-color: #fff;
-    background-image: url("../img/logo-symbol.png");
+    background-image: url("../img/logoASA.jpg");
     background-size: 24px;
     border-bottom: 1px solid #c2cfd6; } }
 
@@ -7774,7 +7775,8 @@ base-chart.chart {
   padding: 0;
   color: #fff;
   font-size: 14px;
-  background: #48852E;
+  /*background: #48852E;*/
+  background: #022b1d;
  }
   .sidebar .sidebar-close {
     position: absolute;

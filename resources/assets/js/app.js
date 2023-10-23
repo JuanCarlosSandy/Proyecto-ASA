@@ -25,6 +25,7 @@ Vue.component('cliente', require('./components/Cliente.vue'));
 Vue.component('rol', require('./components/Rol.vue'));
 Vue.component('user', require('./components/User.vue'));
 Vue.component('ropa',require('./components/Ropa.vue'))
+Vue.component('donador',require('./components/Donador.vue'))
 Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('notification', require('./components/Notification.vue'));
 

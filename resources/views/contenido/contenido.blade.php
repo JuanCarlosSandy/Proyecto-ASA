@@ -21,7 +21,10 @@
                 <tallaropa></tallaropa>
             </template>
 
-            
+            <template v-if="menu==8">
+                <donador></donador>
+            </template>
+
             <template v-if="menu==5">
                 <user></user>
             </template>
@@ -62,7 +65,9 @@
             <template v-if="menu==17">
                 <editarperfil></editarperfil>
             </template>
-
+            <template v-if="menu==8">
+                <donador></donador>
+            </template>
 
 
 

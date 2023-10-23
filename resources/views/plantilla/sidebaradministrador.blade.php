@@ -31,7 +31,15 @@
 
                         </ul>
                     </li>
-
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Donadores</a>
+                        <ul class="nav-dropdown-items">
+                            
+                            <li @click="menu=8" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-user" style="font-size: 11px;"></i> Registrar donadores</a>
+                            </li>
+                        </ul>
+                    </li>
 
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-lock"></i> Acceso</a>
@@ -44,7 +52,8 @@
                             </li>
                         </ul>
                     </li>
-
+                    
+                    
 
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-line-chart"></i> Reportes</a>

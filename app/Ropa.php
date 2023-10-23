@@ -18,4 +18,7 @@ class Ropa extends Model
     public function tallas(){
         return $this->belongsTo('App\TallaRopa');
     }
+    public function donador(){
+        return $this->hasMany('App\Donador');
+    }
 }

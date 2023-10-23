@@ -29,7 +29,7 @@
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Proveedores</a>
                         <ul class="nav-dropdown-items">
                             
-                            <li @click="menu" class="nav-item">
+                            <li @click="menu=8" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-notebook"></i> Registrar proveedores</a>
                             </li>
                         </ul>
