@@ -11,7 +11,6 @@
 |
 */
 
-use App\Http\Controllers\RopaController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['guest']], function () {
