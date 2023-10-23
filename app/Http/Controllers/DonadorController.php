@@ -42,9 +42,6 @@ class DonadorController extends Controller
 
     public function store(Request $request){
         
-
-        
-
             $persona = new Persona();
             $persona->nombre = $request->input('nombre');
             $persona->tipo_documento = $request->input('tipo_documento');
