@@ -13,7 +13,11 @@ class Producto extends Model
         return $this->belongsTo('App\Categoria_Alimentos');
     }
 
-    public function donador(){
+    /*public function donador(){
         return $this->hasMany('App\Donador');
+    }*/
+    public function donador()
+    {
+        return $this->belongsToMany(Donador::class, 'entrada_productos','idProducto','idDonador');
     }
 }

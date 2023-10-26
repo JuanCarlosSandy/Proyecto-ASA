@@ -19,3 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::put('/donador/actualizar','DonadorController@update');
+
+Route::post('/producto/registrar','EntradaProductoController@store');
+Route::get('/producto/mostrar','EntradaProductoController@show');
+Route::get('/donador/buscarDonador','DonadorController@buscarDonador');
+Route::get('/ropa','EntradaRopaController@index');

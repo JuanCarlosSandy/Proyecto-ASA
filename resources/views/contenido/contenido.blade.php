@@ -32,7 +32,9 @@
             <template v-if="menu==6">
                 <rol></rol>
             </template>
-
+            <template v-if="menu==9">
+                <historial></historial>
+            </template>
 
             <template v-if="menu==17">
                 <editarperfil></editarperfil>

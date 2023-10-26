@@ -20,6 +20,11 @@ class RopaController extends Controller
         if ($buscar==''){
             $ropas = Ropa::select('ropas.*')
                         ->orderBy('ropas.id', 'desc')->paginate(3);
+
+            /*$ropas =Ropa::select('ropas.*')
+                        ->groupBy('ropas.nombre_ropa')
+                        ->orderBy('ropas.id','desc')
+                        ->paginate(3);*/
         }
         else{
             $ropas = Ropa::select('ropas.*')
@@ -103,5 +108,18 @@ class RopaController extends Controller
 
         return ['categoriaRopa' => $categoriaRopa];
 
+    }
+    public function buscarRopa(Request $request){
+        
+        $buscar = $request->input('nombre_ropa');
+        if ($buscar!=''){
+        $resultados =Ropa::select('ropas.*')
+        ->where ('ropas.nombre_ropa','LIKE',$buscar.'%')->get ();
+        
+        }
+        else {
+            $resultados =[];
+        }
+        return ['resultados' => $resultados];
     }
 }
