@@ -50,6 +50,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/producto/actualizar', 'ProductoController@update');
         Route::delete('/producto/eliminar/{id}', 'ProductoController@eliminar');
         Route::get('/producto/obtenerDatosCategoria', 'ProductoController@obtenerDatosCategoria');
+        Route::get('/producto/buscarPersona', 'ProductoController@buscarPersona');
+
 
         Route::get('/categoriaropa', 'CategoriaRopaController@index');
         Route::post('/categoriaropa/registrar', 'CategoriaRopaController@store');

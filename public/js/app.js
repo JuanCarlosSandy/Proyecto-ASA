@@ -54420,6 +54420,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -54429,6 +54438,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             cantidad: '',
             arrayProducto: [],
             arrayCategorias: [],
+            num_documento: '', // Campo de texto para el CI
+            arrayDonador: [],
+            selectedDonante: null,
+            idDonador: 0,
             idCategoria_Alimentos: 0,
             modal: 0,
             tituloModal: '',
@@ -54545,8 +54558,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
             });
         },
-        eliminarProducto: function eliminarProducto(id) {
+        buscarPersona: function buscarPersona() {
             var _this = this;
+
+            axios.get('/producto/buscarPersona', { params: { num_documento: this.num_documento } }).then(function (response) {
+                _this.arrayDonador = response.data.personas;
+            }).catch(function (error) {
+                console.log(error);
+            });
+            console.log('datos ', this.arrayDonador);
+        },
+        seleccionarPersona: function seleccionarPersona(donante) {
+            this.num_documento = donante.num_documento; // Autocompletar el campo de texto
+            this.arrayDonador = [];
+        },
+        eliminarProducto: function eliminarProducto(id) {
+            var _this2 = this;
 
             swal({
                 title: '¿Está seguro de eliminar este producto?',
@@ -54562,7 +54589,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 reverseButtons: true
             }).then(function (result) {
                 if (result.value) {
-                    var me = _this;
+                    var me = _this2;
 
                     axios.delete('/producto/eliminar/' + id).then(function (response) {
                         me.listarProducto(1, '', 'nombre');
@@ -55084,6 +55111,51 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
+                    _c("div", [
+                      _vm._m(3),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.num_documento,
+                            expression: "num_documento"
+                          }
+                        ],
+                        attrs: { type: "text", placeholder: "Buscar CI" },
+                        domProps: { value: _vm.num_documento },
+                        on: {
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.num_documento = $event.target.value
+                            },
+                            _vm.buscarPersona
+                          ]
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        _vm._l(_vm.arrayDonador, function(donante) {
+                          return _c(
+                            "li",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.seleccionarPersona(donante)
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(donante.num_documento))]
+                          )
+                        })
+                      )
+                    ]),
+                    _vm._v(" "),
                     _c(
                       "div",
                       {
@@ -55203,6 +55275,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "tipo_producto" } }, [
       _c("strong", [_vm._v("Categoria")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "num_documento" } }, [
+      _c("strong", [_vm._v("DONADOR")])
     ])
   }
 ]

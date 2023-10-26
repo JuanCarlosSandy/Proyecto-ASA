@@ -13,6 +13,8 @@ use App\Exports\ProductExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Producto;
+use App\Donador;
+use App\Persona;
 use App\Categoria_Alimentos;
 
 class ProductoController extends Controller
@@ -86,6 +88,16 @@ class ProductoController extends Controller
         return ['categorias' => $categorias];
 
     }
+
+    public function buscarPersona(Request $request)
+    {
+        $ci = $request->input('num_documento');
+        $personas = Donador::join('personas', 'donadores.idPersona', '=', 'personas.id')
+        ->select('donadores.id', 'personas.num_documento', 'personas.nombre')
+        ->where('personas.num_documento', 'like', $ci . '%')->get();
+
+        return ['personas' => $personas];
+    }   
 
     public function eliminar(Request $request, $id)
     {

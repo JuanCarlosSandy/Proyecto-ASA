@@ -106,6 +106,15 @@
                             </select>
                         </div>
 
+                        <div>
+                            <label for="num_documento"><strong>DONADOR</strong></label>
+                            <input type="text" v-model="num_documento" @input="buscarPersona" placeholder="Buscar CI">
+                            <ul>
+                                <li v-for="donante in arrayDonador" @click="seleccionarPersona(donante)">{{ donante.num_documento }}</li>
+                            </ul>
+                        </div>
+
+
                         <div v-show="errorProducto" class="form-group row div-error">
                             <div class="text-center text-error">
                                 <div v-for="error in errorMostrarMsjProducto" :key="error" v-text="error">
@@ -139,6 +148,10 @@ data (){
         cantidad : '',
         arrayProducto : [],
         arrayCategorias : [],
+        num_documento: '', // Campo de texto para el CI
+        arrayDonador : [],
+        selectedDonante: null,
+        idDonador : 0,
         idCategoria_Alimentos : 0,
         modal : 0,
         tituloModal : '',
@@ -258,6 +271,23 @@ methods : {
                 console.log(error);
             });
             },
+
+    buscarPersona() {
+            axios.get('/producto/buscarPersona', { params: { num_documento: this.num_documento } })
+                .then(response => {
+                    this.arrayDonador = response.data.personas;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+                console.log ('datos ', this.arrayDonador);
+            },
+    
+    seleccionarPersona(donante) {
+            this.num_documento = donante.num_documento; // Autocompletar el campo de texto
+            this.arrayDonador = [];
+        },
+
 
     eliminarProducto(id){
         swal({
