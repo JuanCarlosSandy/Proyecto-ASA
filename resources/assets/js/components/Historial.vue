@@ -8,10 +8,7 @@
         <!-- Ejemplo de tabla Listado -->
         <div class="card">
             <div class="card-header">
-                <i class="fa fa-align-justify"></i> Productos
-                <button type="button" @click="abrirModal('producto','registrar')" class="btn btn-secondary">
-                    <i class="icon-plus"></i>&nbsp;Nuevo
-                </button>
+                <i class="fa fa-align-justify"></i> Historial
             </div>
             <div class="card-body">
                 <div class="form-group row">
@@ -28,30 +25,29 @@
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>Opciones</th>
-                            <th>N°</th>
-                            <th>Nombre</th>
+                            <th>Nombre Ropa</th>
+                            <th>Nombre Donador</th>
                             <th>Cantidad</th>
-                            <th>Categoría</th>
+                            <th>Talla</th>
+                            <th>Sexo</th>
+                            <th>Estacion</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="producto in arrayProducto" :key="producto.id">
+                        <tr v-for="entrada in arrayEntradasRopas" >
+    
+                            <td v-text="entrada.nombre_ropa"></td>
+
                             <td>
-                                <button type="button" @click="abrirModal('producto','actualizar',producto)" class="btn btn-warning btn-sm">
-                                  <i class="icon-pencil"></i>
-                                </button> &nbsp;                                
-                                <button type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(producto.id)">
-                                    <i class="icon-trash"></i>
-                                </button>
-                                        
-                                    
+                                <tr v-for="donador in entrada.donador" :key="donador.id">
+                                        {{ donador.persona.nombre }}
+                                </tr>
+
                             </td>
-                            <td v-text="producto.id"></td>
-                            <td v-text="producto.nombre_producto"></td>
-                            <td v-text="producto.cantidad"></td>
-                            <td v-text="producto.categoria"></td>
-                            
+                            <td v-text="entrada.cantidad"></td>
+                            <td v-text="entrada.talla"></td>
+                            <td v-text="entrada.sexo"></td>
+                            <td v-text="entrada.estacion"></td>
                         </tr>                                
                     </tbody>
                 </table>
@@ -105,20 +101,7 @@
                                 <option v-for="categorias in arrayCategorias" :key="categorias.id" :value="categorias.id">{{ categorias.tipo_producto }}</option>
                             </select>
                         </div>
-<<<<<<< HEAD
-
-                        <div>
-                            <label for="num_documento"><strong>DONADOR</strong></label>
-                            <input type="text" v-model="num_documento" @input="buscarPersona" placeholder="Buscar CI">
-                            <ul>
-                                <li v-for="donante in arrayDonador" @click="seleccionarPersona(donante)">{{ donante.num_documento }}</li>
-                            </ul>
-                        </div>
-
-
-=======
                         
->>>>>>> main
                         <div v-show="errorProducto" class="form-group row div-error">
                             <div class="text-center text-error">
                                 <div v-for="error in errorMostrarMsjProducto" :key="error" v-text="error">
@@ -152,10 +135,7 @@ data (){
         cantidad : '',
         arrayProducto : [],
         arrayCategorias : [],
-        num_documento: '', // Campo de texto para el CI
-        arrayDonador : [],
-        selectedDonante: null,
-        idDonador : 0,
+        arrayEntradasRopas:[],
         idCategoria_Alimentos : 0,
         modal : 0,
         tituloModal : '',
@@ -207,15 +187,18 @@ computed:{
 methods : {
     listarProducto (page,buscar,criterio){
         let me=this;
-        var url= '/producto?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+        var url= '/entradaRopa?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
         axios.get(url).then(function (response) {
             var respuesta= response.data;
-            me.arrayProducto = respuesta.productos.data;
+            me.arrayEntradasRopas = respuesta.entradas;
+            console.log("data: ",JSON.stringify(respuesta)); 
+            
             me.pagination= respuesta.pagination;
         })
         .catch(function (error) {
             console.log(error);
         });
+        console.log("ENTRADA",this.arrayEntradasRopas);
     },
     cambiarPagina(page,buscar,criterio){
         let me = this;
@@ -275,23 +258,6 @@ methods : {
                 console.log(error);
             });
             },
-
-    buscarPersona() {
-            axios.get('/producto/buscarPersona', { params: { num_documento: this.num_documento } })
-                .then(response => {
-                    this.arrayDonador = response.data.personas;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-                console.log ('datos ', this.arrayDonador);
-            },
-    
-    seleccionarPersona(donante) {
-            this.num_documento = donante.num_documento; // Autocompletar el campo de texto
-            this.arrayDonador = [];
-        },
-
 
     eliminarProducto(id){
         swal({

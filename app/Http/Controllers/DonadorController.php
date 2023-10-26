@@ -42,9 +42,6 @@ class DonadorController extends Controller
 
     public function store(Request $request){
         
-
-        
-
             $persona = new Persona();
             $persona->nombre = $request->input('nombre');
             $persona->tipo_documento = $request->input('tipo_documento');
@@ -76,6 +73,21 @@ class DonadorController extends Controller
            
         }
 
+    }
+
+    public function buscarDonador(Request $request){
+        
+        $buscar = trim($request->input('ci'));
+        if (!empty($buscar) && $buscar!=''){
+        $resultados =Donador::join ('personas','donadores.idPersona','=','personas.id')
+        ->select('personas.*','donadores.id as idDonador')
+        ->where ('personas.num_documento','LIKE',$buscar.'%')->get ();
+        
+        }
+        else {
+            $resultados =[];
+        }
+        return ['resultados' => $resultados];
     }
 
 }

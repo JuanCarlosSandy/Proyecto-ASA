@@ -11,7 +11,6 @@
 |
 */
 
-use App\Http\Controllers\RopaController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['guest']], function () {
@@ -44,6 +43,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/ropa/registrar', 'RopaController@store');
         Route::put('/ropa/actualizar', 'RopaController@update');
         Route::delete('/ropa/eliminar/{id}', 'RopaController@eliminar');
+        Route::get ('/ropa/buscarRopas','RopaController@buscarRopa');
+
 
         Route::get('/producto', 'ProductoController@index');
         Route::post('/producto/registrar', 'ProductoController@store');
@@ -66,7 +67,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/donador','DonadorController@index');
         Route::post('/donador/registrar','DonadorController@store');
         Route::post('/donador/actualizar', 'DonadorController@update');
-
+        Route::get('/donador/buscarDonador','DonadorController@buscarDonador');
         
         //Rutas de configuracion de trabajo
         Route::get('/configuracion/editar', 'ConfiguracionTrabajoController@edit');
@@ -89,7 +90,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/user/activar', 'UserController@activar');
         Route::get('/user/listarReporteUsuariosExcel', 'UserController@listarReporteUsuariosExcel');
 
-        
+        Route::post('/entradaRopa/registrar', 'EntradaRopacontroller@store');
+        Route::get('/entradaRopa', 'EntradaRopacontroller@index');
         
         //Rura para que el usuario pueda editar su perfil
         Route::get('/user/editarpersona', 'UserController@editarPersona');
