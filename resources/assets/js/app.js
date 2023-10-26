@@ -30,7 +30,7 @@ Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('notification', require('./components/Notification.vue'));
 
 Vue.component('editarperfil', require('./components/EditarPerfil.vue'));
-
+Vue.component('historial',require('./components/Historial'));
 Vue.component('linea', require('./components/Linea.vue'));
 
 
