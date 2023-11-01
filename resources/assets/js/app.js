@@ -30,7 +30,8 @@ Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('notification', require('./components/Notification.vue'));
 
 Vue.component('editarperfil', require('./components/EditarPerfil.vue'));
-Vue.component('historial',require('./components/Historial'));
+Vue.component('historialp',require('./components/Historialp'));
+Vue.component('historialr',require('./components/Historialr'));
 Vue.component('linea', require('./components/Linea.vue'));
 
 

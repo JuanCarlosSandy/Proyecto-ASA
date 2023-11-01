@@ -28,10 +28,10 @@ class ProductoController extends Controller
         $criterio = $request->criterio;
 
         if ($buscar == '') {
-            $productos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
-                ->select(
-                    'productos.*', 'categoria_alimentos.tipo_producto as categoria'
-                )
+                $productos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+                    ->select(
+                        'productos.*', 'categoria_alimentos.tipo_producto as categoria'
+                    )
                 ->orderBy('productos.id', 'desc')->paginate(3);
         } else {
             $productos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
@@ -97,6 +97,18 @@ class ProductoController extends Controller
         ->where('personas.num_documento', 'like', $ci . '%')->get();
 
         return ['personas' => $personas];
+    }   
+
+    public function buscarProducto(Request $request){    
+        $buscar = $request->input('nombre_producto');
+        if ($buscar!=''){
+        $resultados = Producto::select('productos.*')
+        ->where ('productos.nombre_producto', 'like', $buscar. '%')->get ();
+        }
+        else {
+            $resultados =[];
+        }
+        return ['resultados' => $resultados];
     }   
 
     public function eliminar(Request $request, $id)

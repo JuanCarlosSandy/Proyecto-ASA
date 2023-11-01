@@ -20,11 +20,6 @@ class RopaController extends Controller
         if ($buscar==''){
             $ropas = Ropa::select('ropas.*')
                         ->orderBy('ropas.id', 'desc')->paginate(3);
-
-            /*$ropas =Ropa::select('ropas.*')
-                        ->groupBy('ropas.nombre_ropa')
-                        ->orderBy('ropas.id','desc')
-                        ->paginate(3);*/
         }
         else{
             $ropas = Ropa::select('ropas.*')
@@ -121,5 +116,5 @@ class RopaController extends Controller
             $resultados =[];
         }
         return ['resultados' => $resultados];
-    }
+    }  
 }
