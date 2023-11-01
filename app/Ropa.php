@@ -8,7 +8,7 @@ class Ropa extends Model
 {
     protected $table = 'ropas';
     protected $fillable =[
-        'nombre_ropa','cantidad','sexo','idTalla','idEstacion'
+        'nombre_ropa','cantidad','sexo','talla','estacion'
     ];
 
     public function categoria(){

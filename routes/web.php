@@ -47,10 +47,13 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::get('/producto', 'ProductoController@index');
-        Route::post('/producto/registrar', 'ProductoController@store');
         Route::put('/producto/actualizar', 'ProductoController@update');
         Route::delete('/producto/eliminar/{id}', 'ProductoController@eliminar');
         Route::get('/producto/obtenerDatosCategoria', 'ProductoController@obtenerDatosCategoria');
+        Route::get('/producto/buscarPersona', 'ProductoController@buscarPersona');
+        Route::get('/producto/buscarProducto', 'ProductoController@buscarProducto');
+
+
 
         Route::get('/categoriaropa', 'CategoriaRopaController@index');
         Route::post('/categoriaropa/registrar', 'CategoriaRopaController@store');
@@ -90,6 +93,10 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/entradaRopa/registrar', 'EntradaRopacontroller@store');
         Route::get('/entradaRopa', 'EntradaRopacontroller@index');
+
+        Route::get('/entradaProducto', 'EntradaProductocontroller@index');
+        Route::post('/entradaProducto/registrar', 'EntradaProductoController@store');
+
         
         //Rura para que el usuario pueda editar su perfil
         Route::get('/user/editarpersona', 'UserController@editarPersona');

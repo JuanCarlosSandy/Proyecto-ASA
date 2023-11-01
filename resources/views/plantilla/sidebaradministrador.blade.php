@@ -21,14 +21,6 @@
                                 <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Ropa - Vestimenta</a>
                             </li>
 
-                            <li @click="menu=4" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Categoria Ropa</a>
-                            </li>
-
-                            <li @click="menu=7" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Talla Ropa</a>
-                            </li>
-
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">
@@ -59,8 +51,13 @@
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-line-chart"></i> Reportes</a>
                         <ul class="nav-dropdown-items">
                             <li @click="menu=9" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Historial</a>
+                                <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Historial Ropa</a>
                             </li>
+
+                            <li @click="menu=4" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Historial Productos</a>
+                            </li>
+
                             <li @click="menu=10" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Reporte Ventas</a>
                             </li>

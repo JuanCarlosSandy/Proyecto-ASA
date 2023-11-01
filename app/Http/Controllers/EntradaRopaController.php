@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class EntradaRopaController extends Controller
 {
-    public function index(Request $request){
-
-        
+    public function index(Request $request){  
         $buscar = $request->buscar;
         $criterio = $request->criterio;
         if ($buscar == '') {

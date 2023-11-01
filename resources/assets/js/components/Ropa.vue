@@ -94,12 +94,9 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="tipo_producto">Buscador CI</label>
                                     <div class="col-md-9">
-                                    <input type="text-input" v-model="buscarCI" @input="buscarPersonasCI" >
-                                    
+                                    <input type="text-input" v-model="buscarCI" @input="buscarPersonasCI" > 
                                     <ul>
-                                        <li v-for="result in arrayDonadores" @click="selectPerson(result)">
-                                            {{ result.nombre }}
-                                        </li>
+                                        <li v-for="result in arrayDonadores" @click="selectPerson(result)">{{ result.nombre }}</li>
                                         <li v-if="arrayDonadores.length === 0 && buscarCI.length === 0">No se encontraron resultados</li>
                                     </ul>
                                 </div>
@@ -109,9 +106,7 @@
                             <div class="col-md-9">
                                 <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre de la ropa" @input="buscarRopas" :disabled="opcionSeleccionada">
                                 <ul v-if="!opcionSeleccionada">
-                                        <li v-for="ropas in arrayRopasBuscador" @click="selectRopa(ropas)" >
-                                            {{ ropas.nombre_ropa }}
-                                        </li>
+                                        <li v-for="ropas in arrayRopasBuscador" @click="selectRopa(ropas)" >{{ ropas.nombre_ropa }}</li>
                                         <li v-if="arrayRopasBuscador.length === 0 || nombre_ropa.length === 0">No se encontraron resultados</li>
                                     </ul>
                             </div>
@@ -143,6 +138,9 @@
                                 <option value="masculino">Masculino</option>
                             </select>
                         </div>
+                    
+                        
+                    
                         <div class="form-group">
                             <label for="tipo_producto"><strong>Talla</strong></label>
                             <select id="idTallas" v-model="idTallas" class="form-control">
@@ -274,31 +272,7 @@ export default {
             //Envia la petición para visualizar la data de esa página
             me.listarProducto(page,buscar,criterio);
         },
-        /*registrarProducto(){
-            if (this.validarProducto()){
-                return;
-            }
-            let me = this;
-            
-            axios.post('/ropa/registrar',{
-                'nombre_producto': this.nombre_producto,
-                'cantidad': this.cantidad,
-                'idTallas' : this.idTallas,
-                'sexo':this.sexo,
-                'idCategoriaRopa':this.idCategoriaRopa
-                
-            }).then(function (response) {
-                me.cerrarModal();
-                me.listarProducto(1,'','nombre');
-            }).catch(function (error) {
-                console.log("error"+error);
-            });
-            console.log("nombre_producto"+ this.nombre_producto+ "+"+typeof this.nombre_producto);
-            console.log("cantidad "+ this.cantidad+ " +"+typeof this.cantidad);
-            console.log("id talla "+ this.idTallas+ "+"+typeof this.idTallas);
-            console.log("sexo "+ this.sexo+ "+"+typeof this.sexo);
-            console.log("idCategoriaRopa "+ this.idCategoriaRopa + "+"+typeof this.idCategoriaRopa);
-        },*/
+        
         registrarProducto(){
             if (this.validarProducto()){
                 return;
@@ -394,21 +368,18 @@ export default {
             console.log("id donador "+this.idDonador );
             this.opcionDonador=true;
         },
-        buscarRopas(){
-            
+
+        buscarRopas(){  
             let me = this;
             axios.get('/ropa/buscarRopas',{ params: { nombre_ropa: this.nombre_producto } }).then(function(response){
                 var respuesta = response.data;
-                
                 me.arrayRopasBuscador= respuesta.resultados;
-
-
             })
             .catch(function(error){
                 console.log(error);
             });
-            
         },
+
         selectRopa(ropa){
             this.idRopa =  ropa.id;
             this.nombre_producto=ropa.nombre_ropa
@@ -450,7 +421,6 @@ export default {
             }) 
         },
 
-
         validarProducto(){
             this.errorProducto=0;
             this.errorMostrarMsjProducto =[];
@@ -461,6 +431,7 @@ export default {
 
             return this.errorProducto;
         },
+
         cerrarModal(){
             this.opcionSeleccionada=false;
             this.opcionDonador= false;
