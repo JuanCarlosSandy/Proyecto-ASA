@@ -14,11 +14,9 @@
             <template v-if="menu==3">
                 <ropa></ropa>
             </template>
+
             <template v-if="menu==4">
-                <catropa></catropa>
-            </template>
-            <template v-if="menu==7">
-                <tallaropa></tallaropa>
+                <historialp></historialp>
             </template>
 
             <template v-if="menu==8">
@@ -33,14 +31,12 @@
                 <rol></rol>
             </template>
             <template v-if="menu==9">
-                <historial></historial>
+                <historialr></historialr>
             </template>
 
             <template v-if="menu==17">
                 <editarperfil></editarperfil>
             </template>
-
-
 
             <template v-if="menu==21">
                 <configuracion></configuracion>

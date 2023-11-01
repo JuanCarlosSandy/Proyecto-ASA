@@ -35,14 +35,11 @@
                     </thead>
                     <tbody>
                         <tr v-for="entrada in arrayEntradasRopas" >
-    
                             <td v-text="entrada.nombre_ropa"></td>
-
                             <td>
                                 <tr v-for="donador in entrada.donador" :key="donador.id">
                                         {{ donador.persona.nombre }}
                                 </tr>
-
                             </td>
                             <td v-text="entrada.cantidad"></td>
                             <td v-text="entrada.talla"></td>

@@ -13,6 +13,8 @@ use App\Exports\ProductExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Producto;
+use App\Donador;
+use App\Persona;
 use App\Categoria_Alimentos;
 
 class ProductoController extends Controller
@@ -26,10 +28,10 @@ class ProductoController extends Controller
         $criterio = $request->criterio;
 
         if ($buscar == '') {
-            $productos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
-                ->select(
-                    'productos.*', 'categoria_alimentos.tipo_producto as categoria'
-                )
+                $productos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+                    ->select(
+                        'productos.*', 'categoria_alimentos.tipo_producto as categoria'
+                    )
                 ->orderBy('productos.id', 'desc')->paginate(3);
         } else {
             $productos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
@@ -86,6 +88,28 @@ class ProductoController extends Controller
         return ['categorias' => $categorias];
 
     }
+
+    public function buscarPersona(Request $request)
+    {
+        $ci = $request->input('num_documento');
+        $personas = Donador::join('personas', 'donadores.idPersona', '=', 'personas.id')
+        ->select('donadores.id', 'personas.num_documento', 'personas.nombre')
+        ->where('personas.num_documento', 'like', $ci . '%')->get();
+
+        return ['personas' => $personas];
+    }   
+
+    public function buscarProducto(Request $request){    
+        $buscar = $request->input('nombre_producto');
+        if ($buscar!=''){
+        $resultados = Producto::select('productos.*')
+        ->where ('productos.nombre_producto', 'like', $buscar. '%')->get ();
+        }
+        else {
+            $resultados =[];
+        }
+        return ['resultados' => $resultados];
+    }   
 
     public function eliminar(Request $request, $id)
     {

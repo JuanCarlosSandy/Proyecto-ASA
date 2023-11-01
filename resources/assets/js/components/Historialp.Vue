@@ -8,17 +8,14 @@
         <!-- Ejemplo de tabla Listado -->
         <div class="card">
             <div class="card-header">
-                <i class="fa fa-align-justify"></i> Productos
-                <button type="button" @click="abrirModal('producto','registrar')" class="btn btn-secondary">
-                    <i class="icon-plus"></i>&nbsp;Nuevo
-                </button>
+                <i class="fa fa-align-justify"></i> Historial
             </div>
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-md-6">
                         <div class="input-group">
                             <select class="form-control col-md-3" v-model="criterio">
-                              <option value="nombre_p">Nombre</option>
+                              <option value="nombre_producto">Nombre</option>
                             </select>
                             <input type="text" v-model="buscar" @keyup.enter="listarProducto(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                             <button type="submit" @click="listarProducto(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -28,30 +25,19 @@
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>Opciones</th>
-                            <th>N°</th>
-                            <th>Nombre</th>
+                            <th>Nombre Producto</th>
+                            <th>Nombre Donador</th>
                             <th>Cantidad</th>
-                            <th>Categoría</th>
+                            <th>Categoria</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="producto in arrayProducto" :key="producto.id">
-                            <td>
-                                <button type="button" @click="abrirModal('producto','actualizar',producto)" class="btn btn-warning btn-sm">
-                                  <i class="icon-pencil"></i>
-                                </button> &nbsp;                                
-                                <button type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(producto.id)">
-                                    <i class="icon-trash"></i>
-                                </button>
-                                        
-                                    
-                            </td>
-                            <td v-text="producto.id"></td>
-                            <td v-text="producto.nombre_producto"></td>
-                            <td v-text="producto.cantidad"></td>
-                            <td v-text="producto.categoria"></td>
-                            
+                        <tr v-for="entrada in arrayEntradasProductos" >
+                            <td v-text="entrada.nombre_producto"></td>
+                            <td v-text="entrada.nombre"></td>
+                            <td v-text="entrada.cantidad"></td>
+                            <td v-text="entrada.categoria"></td>
+
                         </tr>                                
                     </tbody>
                 </table>
@@ -79,51 +65,22 @@
                 <div class="modal-header">
                     <h4 class="modal-title" v-text="tituloModal"></h4>
                     <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
-                      <span aria-hidden="true">×</span>
+                      <span aria-hidden="true"></span>
                     </button>
                 </div>
-
                 <div class="modal-body">
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-                        <div class="row">
-                            <div class="col-md-6">
-                            <div class="form-group row">
-                            <div class="col-md-9">
-                                    <label for="num_documento"><strong>DONADOR</strong></label>
-                                    <input type="text" v-model="num_documento" @input="buscarPersonasCI" placeholder="Buscar CI">
-                                    <ul>
-                                        <li v-for="donante in arrayDonador" @click="seleccionarPersona(donante)">{{ donante.num_documento }}</li>
-                                        <li v-if="arrayDonador.length === 0 && num_documento.length === 0">No se encontraron resultados</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                        
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="text-input">Nombre Producto</label>
                             <div class="col-md-9">
-                                <input type="text" v-model="nombre_p" class="form-control" placeholder="Nombre del Producto" @input="buscarProducto" :disabled="opcionSeleccionada">
-                                <ul v-if="!opcionSeleccionada">
-                                        <li v-for="productos in arrayProductosBuscador" @click="selectProducto(productos)" >{{ productos.nombre_producto }}</li>
-                                        <li v-if="arrayProductosBuscador.length === 0 || nombre_producto.length === 0">No se encontraron resultados</li>
-                                    </ul>
+                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre del Producto">
+                                
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="email-input">Cantidad</label>
                             <div class="col-md-9">
                                 <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="text-input">Nombre Donador</label>
-                            <div class="col-md-9">
-                                <input type="text" v-model="nombre_donador" class="form-control" placeholder="Nombre del donador" :disabled="selectedDonante">                   
                             </div>
                         </div>
 
@@ -133,17 +90,15 @@
                                 <option value="" disabled>Selecciona una categoria</option>
                                 <option v-for="categorias in arrayCategorias" :key="categorias.id" :value="categorias.id">{{ categorias.tipo_producto }}</option>
                             </select>
-                        </div>
-                        </div>
-
+            </div>
+                        
                         <div v-show="errorProducto" class="form-group row div-error">
                             <div class="text-center text-error">
                                 <div v-for="error in errorMostrarMsjProducto" :key="error" v-text="error">
+
                                 </div>
                             </div>
                         </div>
-                    </div>
-
 
                     </form>
                 </div>
@@ -166,20 +121,11 @@ export default {
 data (){
     return {
         id: 0,
-        idProducto: 0,
         nombre_producto : '',
-        nombre_p : '',
-        buscarProductos : '',
-        opcionSeleccionada: false,
         cantidad : '',
         arrayProducto : [],
-        arrayProductosBuscador : [],
         arrayCategorias : [],
-        num_documento: '', // Campo de texto para el CI
-        arrayDonador : [],
-        nombre_donador : '',
-        selectedDonante: false,
-        idDonador : 0,
+        arrayEntradasProductos:[],
         idCategoria_Alimentos : 0,
         modal : 0,
         tituloModal : '',
@@ -231,16 +177,19 @@ computed:{
 methods : {
     listarProducto (page,buscar,criterio){
         let me=this;
-        var url= '/producto?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+        var url= '/entradaProducto?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
         axios.get(url).then(function (response) {
             var respuesta= response.data;
-            me.arrayProducto = respuesta.productos.data;
+            me.arrayEntradasProductos = respuesta.entradas;
+            console.log("data: ",JSON.stringify(respuesta)); 
             me.pagination= respuesta.pagination;
         })
         .catch(function (error) {
             console.log(error);
         });
+        console.log("ENTRADA",this.arrayEntradasProductos);
     },
+
     cambiarPagina(page,buscar,criterio){
         let me = this;
         //Actualiza la página actual
@@ -250,30 +199,32 @@ methods : {
     },
     registrarProducto(){
         if (this.validarProducto()){
-                return;
-            }
-            let me = this;
-            axios.post('/entradaProducto/registrar',{
-                'idDonador':this.arrayDonador[0].idDonador,
-                'idProducto' :this.idProducto,
-                'nombre_producto' : this.nombre_p,
-                'cantidad' : this.cantidad,
-                'idCategoria_Alimentos' : this.idCategoria_Alimentos
-            }).then(function (response) {
-                me.cerrarModal();
-                me.listarProducto(1,'','nombre');
-            }).catch(function (error) {
-                console.log("error"+error);
-            });
+            return;
+        }
+        
+        let me = this;
+
+        axios.post('/producto/registrar',{
+            'nombre_producto': this.nombre_producto,
+            'cantidad': this.cantidad,
+            'idCategoria_Alimentos' : this.idCategoria_Alimentos
+            
+        }).then(function (response) {
+            me.cerrarModal();
+            me.listarProducto(1,'','nombre');
+        }).catch(function (error) {
+            console.log(error);
+        });
     },
     actualizarProducto(){
        if (this.validarProducto()){
             return;
-        }       
+        }
+        
         let me = this;
 
         axios.put('/producto/actualizar',{
-            'nombre_p': this.nombre_p,
+            'nombre_producto': this.nombre_producto,
             'cantidad': this.cantidad,
             'id': this.id,
             'idCategoria_Alimentos' : this.idCategoria_Alimentos
@@ -297,52 +248,6 @@ methods : {
                 console.log(error);
             });
             },
-
-    buscarPersonasCI(){
-                if (this.num_documento === '') {
-                    this.arrayDonador =[];
-                    this.num_documento =''; 
-                    return;
-                }
-                let me = this;
-                axios.get('/donador/buscarDonador',{ params: { ci: this.num_documento } }).then(function(response){
-                    var respuesta = response.data;
-                    me.arrayDonador= respuesta.resultados;             
-                })
-                .catch(function(error){
-                    console.log(error);
-                });
-                
-            },
-    
-    buscarProducto(){         
-            let me = this;
-            axios.get('/producto/buscarProducto',{ params: { nombre_producto: this.nombre_p } }).then(function(response){
-                var respuesta = response.data;               
-                me.arrayProductosBuscador= respuesta.resultados;
-                console.log("PRODUCTOS", me.arrayProductosBuscador);
-
-            })
-            .catch(function(error){
-                console.log(error);
-                console.log("PRODUCTOS", me.arrayProductosBuscador);
-            });
-            
-        },
-
-    selectProducto(producto){
-            this.idProducto =  producto.id;
-            this.nombre_p=producto.nombre_producto
-            this.opcionSeleccionada = true;
-        },
-
-    seleccionarPersona(donante) {
-            this.num_documento='';
-            this.nombre_donador = donante.nombre;
-            this.num_documento = donante.num_documento; // Autocompletar el campo de texto
-            this.selectedDonante=true;
-        },
-
 
     eliminarProducto(id){
         swal({
@@ -383,23 +288,18 @@ methods : {
         this.errorProducto=0;
         this.errorMostrarMsjProducto =[];
 
-        if (!this.nombre_p) this.errorMostrarMsjProducto.push("El nombre del producto no puede estar vacío.");
+        if (!this.nombre_producto) this.errorMostrarMsjProducto.push("El nombre del producto no puede estar vacío.");
 
         if (this.errorMostrarMsjProducto.length) this.errorProducto = 1;
 
         return this.errorProducto;
     },
-
     cerrarModal(){
         this.modal=0;
         this.tituloModal='';
-        this.nombre_p='';
+        this.nombre_producto='';
         this.cantidad='';
-        this.nombre_donador='';
-        this.selectedDonante = false;
-        this.opcionSeleccionada=false;
     },
-
     abrirModal(modelo, accion, data = []){
         switch(modelo){
             case "producto":
@@ -407,12 +307,9 @@ methods : {
                 switch(accion){
                     case 'registrar':
                     {
-                        this.nombre_donador='';
-                        this.arrayDonador=[];
                         this.modal = 1;
                         this.tituloModal = 'Registrar Producto';
-                        this.nombre_p= '';
-                        this.nombre_donador='';
+                        this.nombre_producto= '';
                         this.cantidad = '';
                         this.tipoAccion = 1;
                         break;
@@ -424,7 +321,7 @@ methods : {
                         this.tituloModal='Actualizar Producto';
                         this.tipoAccion=2;
                         this.id=data['id'];
-                        this.nombre_p = data['nombre_producto'];
+                        this.nombre_producto = data['nombre_producto'];
                         this.cantidad= data['cantidad'];
                         this.idCategoria_Alimentos= data['idCategoria_Alimentos'];
 

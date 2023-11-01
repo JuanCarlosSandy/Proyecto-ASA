@@ -81,8 +81,7 @@ class DonadorController extends Controller
         if (!empty($buscar) && $buscar!=''){
         $resultados =Donador::join ('personas','donadores.idPersona','=','personas.id')
         ->select('personas.*','donadores.id as idDonador')
-        ->where ('personas.num_documento','LIKE',$buscar.'%')->get ();
-        
+        ->where ('personas.num_documento','LIKE',$buscar.'%')->get ();       
         }
         else {
             $resultados =[];

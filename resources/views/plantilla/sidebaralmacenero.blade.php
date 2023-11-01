@@ -19,10 +19,6 @@
                             <li @click="menu=3" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Ropa - Vestimenta</a>
                             </li>
-
-                            <li @click="menu=4" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Categoria Ropa</a>
-                            </li>
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">

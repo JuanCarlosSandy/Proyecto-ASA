@@ -4,14 +4,51 @@ namespace App\Http\Controllers;
 
 use App\Donador;
 use App\Entrada_producto;
+use App\Categoria_Alimentos;
 use App\Producto;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class EntradaProductoController extends Controller
 {
-    public function index(){
+    public function index(Request $request)
+    {
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+        if ($buscar == '') {
+            $entrada = DB::table('entrada_productos')
+            ->join('productos', 'entrada_productos.idProducto', '=', 'productos.id')
+            ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
+            ->join('personas', 'donadores.idPersona', '=', 'personas.id')
+            ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+            ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
+            ->orderBy('entrada_productos.id','desc')
+            ->paginate(3);
 
+        }
+        else {
+            $entrada = DB::table('entrada_productos')
+            ->join('productos', 'entrada_productos.idProducto', '=', 'productos.id')
+            ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
+            ->join('personas', 'donadores.idPersona', '=', 'personas.id')
+            ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+            ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
+            ->orderBy('entrada_productos.id','desc')
+            ->paginate(3);
+
+        }
+        return [
+            'pagination' => [
+                'total' => $entrada->total(),
+                'current_page' => $entrada->currentPage(),
+                'per_page' => $entrada->perPage(),
+                'last_page' => $entrada->lastPage(),
+                'from' => $entrada->firstItem(),
+                'to' => $entrada->lastItem(),
+            ],
+            'entradas' => $entrada->items(),
+        ];
     }
+
     public function store(Request $request){
         $registro = new Entrada_producto();
         $donador=Donador::find($request->input('idDonador'));
@@ -21,7 +58,6 @@ class EntradaProductoController extends Controller
             if($producto){
                 $producto->cantidad+=$request->input('cantidad');
                 $producto->save();
-
             }
             else{
                 $producto = new Producto();
@@ -33,22 +69,9 @@ class EntradaProductoController extends Controller
             $registro->idProducto=$producto->id;
             $registro->idDonador =$donador->id;
             $registro->save();
-            return response()->json('producto registrado');
         }
-        else{
-            return response()->json(['error' => 'no existe donador'], 400);
-        }
-        
-        /*$nuevo_producto = new Producto();
-        $nuevo_producto->idProducto = $request->input('idProducto');
-        
-
-        $producto = Producto::find($nuevo_producto->idProducto);
-        if ($producto){
-            $nuevo_producto->cantidad= $request->input('cantidad');
-        }*/
-
     }
+
     public function show(){
         $entrada = Producto::with('donador')->get();
         return response()->json( $entrada);
