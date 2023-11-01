@@ -19,12 +19,12 @@ class DonadorController extends Controller
         if ($buscar==''){
             $personas = Donador::join('personas','donadores.idPersona','=','personas.id')
             ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email','donadores.id as idDonador')
-            ->orderBy('personas.id', 'desc')->paginate(3);
+            ->orderBy('personas.id', 'desc')->paginate(10);
         }
         else{
             $personas = Donador::join('personas','donadores.idPersona','=','personas.id')
             ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email')
-            ->where('personas.'.$criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(3);
+            ->where('personas.'.$criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(10);
         }
         
         return [

@@ -8,13 +8,6 @@ use App\Categoria_Alimentos;
 use App\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-<<<<<<< HEAD
-
-class EntradaProductoController extends Controller
-{
-    public function index(){
-        
-=======
 class EntradaProductoController extends Controller
 {
     public function index(Request $request)
@@ -29,7 +22,7 @@ class EntradaProductoController extends Controller
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
             ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
             ->orderBy('entrada_productos.id','desc')
-            ->paginate(3);
+            ->paginate(10);
 
         }
         else {
@@ -40,7 +33,7 @@ class EntradaProductoController extends Controller
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
             ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
             ->orderBy('entrada_productos.id','desc')
-            ->paginate(3);
+            ->paginate(10);
 
         }
         return [
@@ -54,7 +47,7 @@ class EntradaProductoController extends Controller
             ],
             'entradas' => $entrada->items(),
         ];
->>>>>>> 2f49b1fbf16c283f73fe93c9813cddd59a0ae966
+
     }
 
     public function store(Request $request){

@@ -54542,6 +54542,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.validarProducto()) {
                 return;
             }
+            this.convertText();
             var me = this;
             axios.post('/entradaProducto/registrar', {
                 'idDonador': this.arrayDonador[0].idDonador,
@@ -54560,6 +54561,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.validarProducto()) {
                 return;
             }
+            this.convertText();
             var me = this;
 
             axios.put('/producto/actualizar', {
@@ -54573,6 +54575,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+        convertText: function convertText() {
+            var text = this.nombre_p.trim();
+            this.nombre_p = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
         },
         obtenerDatosCategoria: function obtenerDatosCategoria() {
             var me = this;
@@ -60672,23 +60678,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -60782,6 +60771,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             if (this.validarProducto()) {
                 return;
             }
+            this.convertText();
             var me = this;
             axios.post('/entradaRopa/registrar', {
                 'idDonador': this.arrayDonadores[0].idDonador,
@@ -60802,7 +60792,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             if (this.validarProducto()) {
                 return;
             }
-
+            this.convertText();
             var me = this;
             axios.put('/ropa/actualizar', {
                 'nombre_producto': this.nombre_producto,
@@ -60863,6 +60853,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             this.idDonador = persona.idDonador;
             console.log("id donador " + this.idDonador);
             this.opcionDonador = true;
+        },
+        convertText: function convertText() {
+            var text = this.nombre_producto.trim();
+            this.nombre_producto = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
         },
         buscarRopas: function buscarRopas() {
             var me = this;
@@ -61110,6 +61104,22 @@ var render = function() {
                 "tbody",
                 _vm._l(_vm.arrayRopas, function(producto) {
                   return _c("tr", { key: producto.id }, [
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.nombre_ropa) }
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.cantidad) }
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.sexo) }
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.talla) }
+                    }),
+                    _vm._v(" "),
                     _c("td", [
                       _c(
                         "button",
@@ -61140,27 +61150,7 @@ var render = function() {
                         },
                         [_c("i", { staticClass: "icon-trash" })]
                       )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(producto.id) }
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(producto.nombre_ropa) }
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(producto.cantidad) }
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(producto.sexo) }
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(producto.talla) }
-                    })
+                    ])
                   ])
                 })
               )
@@ -61744,17 +61734,15 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Opciones")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("N°")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
         _vm._v(" "),
         _c("th", [_vm._v("Cantidad")]),
         _vm._v(" "),
         _c("th", [_vm._v("Sexo")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Talla")])
+        _c("th", [_vm._v("Talla")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Opciones")])
       ])
     ])
   },
@@ -62084,7 +62072,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             offset: 3,
             criterio: 'nombre',
-            buscar: ''
+            buscar: '',
+            validEmail: true,
+            validTelefono: true
         };
     },
 
@@ -62262,11 +62252,22 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         validarPersona: function validarPersona() {
             this.errorPersona = 0;
             this.errorMostrarMsjPersona = [];
-
+            this.validateEmail();
+            this.validatePhoneNumber();
             if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la pesona no puede estar vacío.");
+            if (!this.validEmail) this.errorMostrarMsjPersona.push("El correo debe contener @");
+            if (!this.validTelefono) this.errorMostrarMsjPersona.push("El numero de telefono debe tener 8 digitos y ser un numero valido");
             if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
             return this.errorPersona;
+        },
+        validateEmail: function validateEmail() {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            this.validEmail = re.test(this.email);
+        },
+        validatePhoneNumber: function validatePhoneNumber() {
+            var pattern = /^[67]\d{7}$/;
+            this.validTelefono = pattern.test(this.telefono);
         },
         cerrarModal: function cerrarModal() {
             //Usando referencia en el file para limpiarlo al cerrar el modal

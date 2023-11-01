@@ -32,14 +32,14 @@ class ProductoController extends Controller
                     ->select(
                         'productos.*', 'categoria_alimentos.tipo_producto as categoria'
                     )
-                ->orderBy('productos.id', 'desc')->paginate(3);
+                ->orderBy('productos.id', 'desc')->paginate(10);
         } else {
             $productos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
                 ->select(
                     'productos.*', 'categoria_alimentos.tipo_producto as categoria'
                 )
                 ->where('productos.' . $criterio, 'like', '%' . $buscar . '%')
-                ->orderBy('productos.id', 'desc')->paginate(3);
+                ->orderBy('productos.id', 'desc')->paginate(10);
         }
 
 
@@ -72,7 +72,7 @@ class ProductoController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $producto = Producto::findOrFail($request->id);
-        $producto->nombre_producto = $request->nombre_producto;
+        $producto->nombre_producto = $request->nombre_p;
         $producto->cantidad = $request->cantidad;
         $producto->idCategoria_Alimentos = $request->idCategoria_Alimentos;
         $producto->save();

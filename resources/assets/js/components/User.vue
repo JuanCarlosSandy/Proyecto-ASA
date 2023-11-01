@@ -256,7 +256,7 @@ export default {
             criterio: 'nombre',
             buscar: '',
             validEmail: true,
-            validTelefono: true
+            validarTelefono: true
         }
     },
     computed: {
@@ -462,7 +462,7 @@ export default {
         },
         validatePhoneNumber() {
             const pattern = /^[67]\d{7}$/;
-            this.validTelefono = pattern.test(this.telefono);
+            this.validarTelefono = pattern.test(this.telefono);
         },
         cerrarModal() {
             //Usando referencia en el file para limpiarlo al cerrar el modal
