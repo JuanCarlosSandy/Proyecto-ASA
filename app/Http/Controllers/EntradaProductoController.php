@@ -22,7 +22,7 @@ class EntradaProductoController extends Controller
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
             ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
             ->orderBy('entrada_productos.id','desc')
-            ->paginate(3);
+            ->paginate(10);
 
         }
         else {
@@ -33,7 +33,7 @@ class EntradaProductoController extends Controller
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
             ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
             ->orderBy('entrada_productos.id','desc')
-            ->paginate(3);
+            ->paginate(10);
 
         }
         return [
@@ -47,6 +47,7 @@ class EntradaProductoController extends Controller
             ],
             'entradas' => $entrada->items(),
         ];
+
     }
 
     public function store(Request $request){
@@ -73,8 +74,28 @@ class EntradaProductoController extends Controller
     }
 
     public function show(){
-        $entrada = Producto::with('donador')->get();
-        return response()->json( $entrada);
+        /*$entrada = Producto::with('donador')->get();
+        return response()->json( $entrada);*/
+
+        $entrada = DB::table('entrada_productos')
+                    ->join('productos', 'entrada_productos.idProducto', '=', 'productos.id')
+                    ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
+                    ->join('personas', 'donadores.idPersona', '=', 'personas.id')
+                    ->select('productos.*', 'donadores.*', 'personas.*')
+                    ->orderBy('entrada_productos.id','desc')
+                    ->paginate(10);
+                    return [
+                        'pagination' => [
+                            'total' => $entrada->total(),
+                            'current_page' => $entrada->currentPage(),
+                            'per_page' => $entrada->perPage(),
+                            'last_page' => $entrada->lastPage(),
+                            'from' => $entrada->firstItem(),
+                            'to' => $entrada->lastItem(),
+                        ],
+                        'entradas' => $entrada->items(),
+                    ];
+        
     }
     public function edit($id){
         

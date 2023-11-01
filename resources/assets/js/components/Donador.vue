@@ -199,7 +199,9 @@ export default {
             },
             offset: 3,
             criterio: 'nombre',
-            buscar: ''
+            buscar: '',
+            validEmail: true,
+            validTelefono: true
         }
     },
     computed: {
@@ -383,11 +385,22 @@ export default {
         validarPersona() {
             this.errorPersona = 0;
             this.errorMostrarMsjPersona = [];
-
+            this.validateEmail();
+            this.validatePhoneNumber();
             if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la pesona no puede estar vacío.");
+            if(!this.validEmail) this.errorMostrarMsjPersona.push("El correo debe contener @");
+            if(!this.validTelefono) this.errorMostrarMsjPersona.push("El numero de telefono debe tener 8 digitos y ser un numero valido");
             if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
             return this.errorPersona;
+        },
+        validateEmail() {
+        const re =/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        this.validEmail = re.test(this.email);
+        },
+        validatePhoneNumber() {
+            const pattern = /^[67]\d{7}$/;
+            this.validTelefono = pattern.test(this.telefono);
         },
         cerrarModal() {
             //Usando referencia en el file para limpiarlo al cerrar el modal

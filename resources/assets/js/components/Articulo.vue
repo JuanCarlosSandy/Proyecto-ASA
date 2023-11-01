@@ -252,6 +252,7 @@ methods : {
         if (this.validarProducto()){
                 return;
             }
+            this.convertText();
             let me = this;
             axios.post('/entradaProducto/registrar',{
                 'idDonador':this.arrayDonador[0].idDonador,
@@ -270,6 +271,7 @@ methods : {
        if (this.validarProducto()){
             return;
         }       
+        this.convertText();
         let me = this;
 
         axios.put('/producto/actualizar',{
@@ -284,7 +286,11 @@ methods : {
             console.log(error);
         }); 
     },
-
+    convertText() {
+            let text = this.nombre_p.trim();
+            this.nombre_p = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+            
+        },
     obtenerDatosCategoria (){
                 let me = this;
                 var url = '/producto/obtenerDatosCategoria';

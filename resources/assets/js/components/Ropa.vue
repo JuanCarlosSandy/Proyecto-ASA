@@ -28,17 +28,23 @@
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>Opciones</th>
-                            <th>N°</th>
+                            
+                            
                             <th>Nombre</th>
                             <th>Cantidad</th>
                             <th>Sexo</th>
                             <th>Talla</th>
-                            <th>Estacion</th>
+                            <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="producto in arrayRopas" :key="producto.id">
+                            
+                            
+                            <td v-text="producto.nombre_ropa"></td>
+                            <td v-text="producto.cantidad"></td>
+                            <td v-text="producto.sexo"></td>
+                            <td v-text="producto.talla"></td>
                             <td>
                                 <button type="button" @click="abrirModal('ropa','actualizar',producto)" class="btn btn-warning btn-sm">
                                   <i class="icon-pencil"></i>
@@ -49,13 +55,6 @@
                                         
                                     
                             </td>
-                            <td v-text="producto.id"></td>
-                            <td v-text="producto.nombre_ropa"></td>
-                            <td v-text="producto.cantidad"></td>
-                            <td v-text="producto.sexo"></td>
-                            <td v-text="producto.talla"></td>
-                            <td v-text="producto.estacion"></td>
-                            
                             
                         </tr>                                
                     </tbody>
@@ -119,18 +118,7 @@
                                 <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="tipo_producto"><strong>Talla</strong></label>
-                            <select id="idTallas" v-model="idTallas" class="form-control">
-                                <option value="0" disabled>Selecciona una Talla</option>
-                                <option value="XS"> XS</option>
-                                <option value="S"> S</option>
-                                <option value="M"> M</option>
-                                <option value="L"> L</option>
-                                <option value="XL"> XL</option>
-
-                            </select>
-                        </div>
+                        
                     </div>
                     <div class="col-md-6">
                         <div class="form-group row">
@@ -150,18 +138,19 @@
                             </select>
                         </div>
                     
-                                       
                         <div class="form-group">
-                            <label for="tipo_producto"><strong>Estacion</strong></label>
-                            <select id="idCategoriaRopa" v-model="idCategoriaRopa" class="form-control">
-                                <option value="0" disabled>Selecciona una Estacion</option>
-                                <option value="Primavera">Primavera</option>
-                                <option value="Verano">Verano</option>
-                                <option value="Otoño">Otoño</option>
-                                <option value="Invierno">Invierno</option>
+                            <label for="tipo_producto"><strong>Talla</strong></label>
+                            <select id="idTallas" v-model="idTallas" class="form-control">
+                                <option value="0" disabled>Selecciona una Talla</option>
+                                <option value="XS"> XS</option>
+                                <option value="S"> S</option>
+                                <option value="M"> M</option>
+                                <option value="L"> L</option>
+                                <option value="XL"> XL</option>
 
                             </select>
-                        </div>
+                        </div>              
+                        
                     </div>
                         </div>
                         <div v-show="errorProducto" class="form-group row div-error">
@@ -283,6 +272,7 @@ export default {
             if (this.validarProducto()){
                 return;
             }
+            this.convertText();
             let me = this;
             axios.post('/entradaRopa/registrar',{
                 'idDonador':this.arrayDonadores[0].idDonador,
@@ -304,7 +294,7 @@ export default {
             if (this.validarProducto()){
                 return;
             }
-            
+            this.convertText();
             let me = this;
             axios.put('/ropa/actualizar',{
                 'nombre_producto': this.nombre_producto,
@@ -374,7 +364,11 @@ export default {
             console.log("id donador "+this.idDonador );
             this.opcionDonador=true;
         },
-
+        convertText() {
+            let text = this.nombre_producto.trim();
+            this.nombre_producto = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+            
+        },
         buscarRopas(){  
             let me = this;
             axios.get('/ropa/buscarRopas',{ params: { nombre_ropa: this.nombre_producto } }).then(function(response){

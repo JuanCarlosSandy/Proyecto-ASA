@@ -19,12 +19,12 @@ class RopaController extends Controller
         
         if ($buscar==''){
             $ropas = Ropa::select('ropas.*')
-                        ->orderBy('ropas.id', 'desc')->paginate(3);
+                        ->orderBy('ropas.nombre_ropa', 'desc')->paginate(10);
         }
         else{
             $ropas = Ropa::select('ropas.*')
             ->where('ropas.' .$criterio, 'like', '%'. $buscar . '%')
-            ->orderBy('ropas.id', 'desc')->paginate(3);
+            ->orderBy('ropas.nombre_ropa', 'desc')->paginate(10);
         }
         
 
@@ -72,7 +72,6 @@ class RopaController extends Controller
         $ropa->cantidad = $request->input('cantidad');
         $ropa->sexo = $request->input('sexo');
         $ropa->talla = $request->input('idTallas');
-        $ropa->estacion = $request->input('idCategoriaRopa');
         $ropa->save();
         }
         catch (Exception $e){

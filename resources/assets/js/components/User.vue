@@ -142,7 +142,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="email-input">Teléfono</label>
-                                <input type="email" v-model="telefono" class="form-control" placeholder="Teléfono">
+                                <input type="number" v-model="telefono" class="form-control" placeholder="Teléfono">
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="email-input">Rol</label>
@@ -254,7 +254,9 @@ export default {
             },
             offset: 3,
             criterio: 'nombre',
-            buscar: ''
+            buscar: '',
+            validEmail: true,
+            validarTelefono: true
         }
     },
     computed: {
@@ -441,14 +443,26 @@ export default {
         validarPersona() {
             this.errorPersona = 0;
             this.errorMostrarMsjPersona = [];
-
+            this.validateEmail();
+            this.validatePhoneNumber();
             if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la pesona no puede estar vacío.");
             if (!this.usuario) this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
             if (!this.password) this.errorMostrarMsjPersona.push("La password del usuario no puede estar vacía.");
             if (this.idrol == 0) this.errorMostrarMsjPersona.push("Seleccione una Role.");
+            if(!this.validEmail) this.errorMostrarMsjPersona.push("El correo debe contener @");
+            if(!this.validTelefono) this.errorMostrarMsjPersona.push("El numero de telefono debe tener 8 digitos y ser un numero valido");
+
             if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
             return this.errorPersona;
+        },
+        validateEmail() {
+        const re =/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        this.validEmail = re.test(this.email);
+        },
+        validatePhoneNumber() {
+            const pattern = /^[67]\d{7}$/;
+            this.validarTelefono = pattern.test(this.telefono);
         },
         cerrarModal() {
             //Usando referencia en el file para limpiarlo al cerrar el modal
