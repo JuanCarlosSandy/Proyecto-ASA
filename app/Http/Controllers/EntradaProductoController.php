@@ -6,11 +6,12 @@ use App\Donador;
 use App\Entrada_producto;
 use App\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EntradaProductoController extends Controller
 {
     public function index(){
-
+        
     }
     public function store(Request $request){
         $registro = new Entrada_producto();
@@ -50,8 +51,28 @@ class EntradaProductoController extends Controller
 
     }
     public function show(){
-        $entrada = Producto::with('donador')->get();
-        return response()->json( $entrada);
+        /*$entrada = Producto::with('donador')->get();
+        return response()->json( $entrada);*/
+
+        $entrada = DB::table('entrada_productos')
+                    ->join('productos', 'entrada_productos.idProducto', '=', 'productos.id')
+                    ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
+                    ->join('personas', 'donadores.idPersona', '=', 'personas.id')
+                    ->select('productos.*', 'donadores.*', 'personas.*')
+                    ->orderBy('entrada_productos.id','desc')
+                    ->paginate(10);
+                    return [
+                        'pagination' => [
+                            'total' => $entrada->total(),
+                            'current_page' => $entrada->currentPage(),
+                            'per_page' => $entrada->perPage(),
+                            'last_page' => $entrada->lastPage(),
+                            'from' => $entrada->firstItem(),
+                            'to' => $entrada->lastItem(),
+                        ],
+                        'entradas' => $entrada->items(),
+                    ];
+        
     }
     public function edit($id){
         

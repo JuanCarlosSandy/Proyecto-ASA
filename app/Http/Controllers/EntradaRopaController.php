@@ -6,6 +6,7 @@ use App\Donador;
 use App\Entrada_ropa;
 use App\Ropa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EntradaRopaController extends Controller
 {
@@ -15,11 +16,24 @@ class EntradaRopaController extends Controller
         $buscar = $request->buscar;
         $criterio = $request->criterio;
         if ($buscar == '') {
-            $entrada = Ropa::with(['donador','Donador.persona'])
-                        ->paginate(3);
+            /*$entrada = Ropa::with(['donador','Donador.persona'])
+        ->paginate(10);*/
+        $entrada = DB::table('entrada_ropas')
+                    ->join('ropas', 'entrada_ropas.idRopa', '=', 'ropas.id')
+                    ->join('donadores', 'entrada_ropas.idDonador', '=', 'donadores.id')
+                    ->join('personas', 'donadores.idPersona', '=', 'personas.id')
+                    ->select('ropas.*', 'donadores.*', 'personas.*')
+                    ->orderBy('entrada_ropas.id','desc')
+                    ->paginate(10);
         }
         else {
-            $entrada = Ropa::with(['donador','Donador.persona'])->paginate(3);
+            $entrada = DB::table('entrada_ropas')
+                    ->join('ropas', 'entrada_ropas.idRopa', '=', 'ropas.id')
+                    ->join('donadores', 'entrada_ropas.idDonador', '=', 'donadores.id')
+                    ->join('personas', 'donadores.idPersona', '=', 'personas.id')
+                    ->select('ropas.*', 'donadores.*', 'personas.*')
+                    ->orderBy('entrada_ropas.id','desc')
+                    ->paginate(10);
 
         }
         return [
@@ -41,7 +55,7 @@ class EntradaRopaController extends Controller
         if ($donador){
             $producto = Ropa::find($request->input('idRopa'));
 
-            if($producto && $producto->talla==$request->input('talla') && $producto->sexo==$request->input('sexo') && $producto->estacion==$request->input('estacion')){
+            if($producto && $producto->talla==$request->input('talla') && $producto->sexo==$request->input('sexo')){
                 $producto->cantidad+=$request->input('cantidad');
                 $producto->save();
             }
@@ -51,9 +65,9 @@ class EntradaRopaController extends Controller
                 $producto->cantidad=$request->input('cantidad');
                 $producto->sexo =$request->input('sexo');
                 $producto->talla=$request->input('talla');
-                $producto->estacion = $request->input('estacion');
                 $producto->save();
             }
+            $registro->cantidad=$request->input('cantidad');
             $registro->idRopa=$producto->id;
             $registro->idDonador=$donador->id;
             $registro->save();

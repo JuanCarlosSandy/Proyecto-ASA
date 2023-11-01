@@ -19,6 +19,7 @@ class CreateEntradaRopasTable extends Migration
             $table->foreign('idDonador')->references('id')->on('donadores')->onDelete('cascade');
             $table->integer('idRopa')->unsigned();
             $table->foreign('idRopa')->references('id')->on('ropas')->onDelete('cascade');
+            $table->integer('cantidad');
             $table->timestamps();
         });
     }

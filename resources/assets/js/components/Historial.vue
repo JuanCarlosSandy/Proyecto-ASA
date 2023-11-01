@@ -30,7 +30,8 @@
                             <th>Cantidad</th>
                             <th>Talla</th>
                             <th>Sexo</th>
-                            <th>Estacion</th>
+                            <th>Opciones</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -38,17 +39,22 @@
     
                             <td v-text="entrada.nombre_ropa"></td>
 
-                            <td>
-                                <tr v-for="donador in entrada.donador" :key="donador.id">
-                                        {{ donador.persona.nombre }}
-                                </tr>
-
-                            </td>
+                            <td v-text="entrada.nombre"></td>
                             <td v-text="entrada.cantidad"></td>
                             <td v-text="entrada.talla"></td>
                             <td v-text="entrada.sexo"></td>
-                            <td v-text="entrada.estacion"></td>
-                        </tr>                                
+                            <td>
+                                <button type="button" @click="abrirModal('ropa','actualizar',producto)" class="btn btn-warning btn-sm">
+                                  <i class="icon-pencil"></i>
+                                </button> &nbsp;                                
+                                <button type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(producto.id)">
+                                    <i class="icon-trash"></i>
+                                </button>
+                                        
+                                    
+                            </td>
+                        </tr> 
+                                                       
                     </tbody>
                 </table>
                 <nav>

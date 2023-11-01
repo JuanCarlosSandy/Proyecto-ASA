@@ -19,7 +19,7 @@ class RopaController extends Controller
         
         if ($buscar==''){
             $ropas = Ropa::select('ropas.*')
-                        ->orderBy('ropas.id', 'desc')->paginate(3);
+                        ->orderBy('ropas.id', 'desc')->paginate(10);
 
             /*$ropas =Ropa::select('ropas.*')
                         ->groupBy('ropas.nombre_ropa')
@@ -29,7 +29,7 @@ class RopaController extends Controller
         else{
             $ropas = Ropa::select('ropas.*')
             ->where('ropas.' .$criterio, 'like', '%'. $buscar . '%')
-            ->orderBy('ropas.id', 'desc')->paginate(3);
+            ->orderBy('ropas.id', 'desc')->paginate(10);
         }
         
 

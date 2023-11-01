@@ -34,7 +34,7 @@
                             <th>Cantidad</th>
                             <th>Sexo</th>
                             <th>Talla</th>
-                            <th>Estacion</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -54,7 +54,7 @@
                             <td v-text="producto.cantidad"></td>
                             <td v-text="producto.sexo"></td>
                             <td v-text="producto.talla"></td>
-                            <td v-text="producto.estacion"></td>
+                            
                             
                             
                         </tr>                                
@@ -124,18 +124,7 @@
                                 <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="tipo_producto"><strong>Talla</strong></label>
-                            <select id="idTallas" v-model="idTallas" class="form-control">
-                                <option value="0" disabled>Selecciona una Talla</option>
-                                <option value="XS"> XS</option>
-                                <option value="S"> S</option>
-                                <option value="M"> M</option>
-                                <option value="L"> L</option>
-                                <option value="XL"> XL</option>
-
-                            </select>
-                        </div>
+                        
                     </div>
                     <div class="col-md-6">
                         <div class="form-group row">
@@ -154,20 +143,21 @@
                                 <option value="masculino">Masculino</option>
                             </select>
                         </div>
-                    
-                        
-                    
                         <div class="form-group">
-                            <label for="tipo_producto"><strong>Estacion</strong></label>
-                            <select id="idCategoriaRopa" v-model="idCategoriaRopa" class="form-control">
-                                <option value="0" disabled>Selecciona una Estacion</option>
-                                <option value="Primavera">Primavera</option>
-                                <option value="Verano">Verano</option>
-                                <option value="Otoño">Otoño</option>
-                                <option value="Invierno">Invierno</option>
+                            <label for="tipo_producto"><strong>Talla</strong></label>
+                            <select id="idTallas" v-model="idTallas" class="form-control">
+                                <option value="0" disabled>Selecciona una Talla</option>
+                                <option value="XS"> XS</option>
+                                <option value="S"> S</option>
+                                <option value="M"> M</option>
+                                <option value="L"> L</option>
+                                <option value="XL"> XL</option>
 
                             </select>
                         </div>
+                        
+                    
+                        
                     </div>
                         </div>
                         <div v-show="errorProducto" class="form-group row div-error">
