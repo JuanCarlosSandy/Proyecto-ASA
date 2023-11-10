@@ -47,7 +47,7 @@
                                 <th>Email</th>
                                 <th>Usuario</th>
                                 <th>Rol</th>
-                                <th>Sucursal</th>
+                                
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -69,7 +69,7 @@
                                 <td v-text="persona.email"></td>
                                 <td v-text="persona.usuario"></td>
                                 <td v-text="persona.rol"></td>
-                                <td v-text="persona.sucursal"></td>
+                                
                                 <td>
                                     <button type="button" @click="abrirModal('persona', 'actualizar', persona)"
                                         class="btn btn-warning btn-sm">
@@ -168,17 +168,11 @@
                                 <input type="email" v-model="num_documento" class="form-control" placeholder="Número de documento">
                             </div>
                             <div class="form-group">
+                                
                                 <label class="form-control-label" for="email-input">Email</label>
                                 <input type="email" v-model="email" class="form-control" placeholder="Email">
                             </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="email-input">Sucursal</label>
-                                <select v-model="idsucursal" class="form-control">
-                                    <option value="0" disabled>Seleccione</option>
-                                    <option v-for="sucursal in arraySucursal" :key="sucursal.id" :value="sucursal.id"
-                                        v-text="sucursal.nombre"></option>
-                                </select>
-                            </div>
+                            
                             <div class="form-group">
                                 <label class="form-control-label" for="email-input">Clave</label>
                                 <input type="password" v-model="password" class="form-control" placeholder="Clave del usuario">
@@ -228,7 +222,7 @@ export default {
             tipo_documento: '',
             num_documento: '',
             direccion: '',
-            telefono: '',
+            telefono: 0,
             email: '',
             usuario: '',
             password: '',
@@ -256,7 +250,7 @@ export default {
             criterio: 'nombre',
             buscar: '',
             validEmail: true,
-            validarTelefono: true
+            validTelefono: true   
         }
     },
     computed: {
@@ -451,6 +445,7 @@ export default {
             if (this.idrol == 0) this.errorMostrarMsjPersona.push("Seleccione una Role.");
             if(!this.validEmail) this.errorMostrarMsjPersona.push("El correo debe contener @");
             if(!this.validTelefono) this.errorMostrarMsjPersona.push("El numero de telefono debe tener 8 digitos y ser un numero valido");
+            
 
             if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
@@ -462,7 +457,7 @@ export default {
         },
         validatePhoneNumber() {
             const pattern = /^[67]\d{7}$/;
-            this.validarTelefono = pattern.test(this.telefono);
+            this.validTelefono = pattern.test(this.telefono);
         },
         cerrarModal() {
             //Usando referencia en el file para limpiarlo al cerrar el modal

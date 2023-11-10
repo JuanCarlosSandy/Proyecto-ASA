@@ -20,7 +20,7 @@ class EntradaProductoController extends Controller
             ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
             ->join('personas', 'donadores.idPersona', '=', 'personas.id')
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
-            ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
+            ->select('productos.nombre_producto', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria','entrada_productos.cantidad')
             ->orderBy('entrada_productos.id','desc')
             ->paginate(10);
 
@@ -31,7 +31,7 @@ class EntradaProductoController extends Controller
             ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
             ->join('personas', 'donadores.idPersona', '=', 'personas.id')
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
-            ->select('productos.*', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria')
+            ->select('productos.nombre_producto', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria','entrada_productos.cantidad')
             ->orderBy('entrada_productos.id','desc')
             ->paginate(10);
 
@@ -67,6 +67,7 @@ class EntradaProductoController extends Controller
                 $producto->cantidad =$request->input('cantidad');
                 $producto->save();
             }
+            $registro->cantidad=$request->input('cantidad');
             $registro->idProducto=$producto->id;
             $registro->idDonador =$donador->id;
             $registro->save();

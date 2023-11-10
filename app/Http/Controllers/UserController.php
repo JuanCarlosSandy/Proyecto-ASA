@@ -29,13 +29,13 @@ class UserController extends Controller
             ->join('roles','users.idrol','=','roles.id')
             
             ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email','personas.fotografia','users.usuario','users.password','users.condicion','users.idrol','roles.nombre as rol')
-            ->orderBy('personas.id', 'desc')->paginate(3);
+            ->orderBy('personas.id', 'desc')->paginate(10);
         }
         else{
             $personas = User::join('personas','users.id','=','personas.id')
             ->join('roles','users.idrol','=','roles.id')
             ->select('personas.id','personas.nombre','personas.tipo_documento','personas.num_documento','personas.direccion','personas.telefono','personas.email','personas.fotografia','users.usuario','users.password','users.condicion','users.idrol','roles.nombre as rol', 'users.idsucursal', 'sucursales.nombre as sucursal')
-            ->where('personas.'.$criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(3);
+            ->where('personas.'.$criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(10);
         }
         
         return [
