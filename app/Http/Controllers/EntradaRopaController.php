@@ -6,6 +6,7 @@ use App\Donador;
 use App\Entrada_ropa;
 use App\Ropa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EntradaRopaController extends Controller
@@ -20,7 +21,8 @@ class EntradaRopaController extends Controller
                     ->join('ropas', 'entrada_ropas.idRopa', '=', 'ropas.id')
                     ->join('donadores', 'entrada_ropas.idDonador', '=', 'donadores.id')
                     ->join('personas', 'donadores.idPersona', '=', 'personas.id')
-                    ->select('ropas.*', 'donadores.*', 'personas.*')
+                    ->join('users','entrada_ropas.encargadoRegistro','=','users.id')
+                    ->select('ropas.nombre_ropa','ropas.talla','ropas.sexo','donadores.idPersona', 'personas.nombre','entrada_ropas.cantidad','entrada_ropas.created_at','users.usuario as encargado')
                     ->orderBy('entrada_ropas.id','desc')
                     ->paginate(10);
         }
@@ -29,7 +31,8 @@ class EntradaRopaController extends Controller
                     ->join('ropas', 'entrada_ropas.idRopa', '=', 'ropas.id')
                     ->join('donadores', 'entrada_ropas.idDonador', '=', 'donadores.id')
                     ->join('personas', 'donadores.idPersona', '=', 'personas.id')
-                    ->select('ropas.*', 'donadores.*', 'personas.*')
+                    ->join('users','entrada_ropas.encargadoRegistro','=','personas.id')
+                    ->select('ropas.nombre_ropa','ropas.talla','ropas.sexo','donadores.idPersona','personas.nombre','entrada_ropas.cantidad','entrada_ropas.created_at','users.usuario as encargado')
                     ->orderBy('entrada_ropas.id','desc')
                     ->paginate(10);
 
@@ -48,6 +51,7 @@ class EntradaRopaController extends Controller
     }
 
     public function store(Request $request){
+        $perfil =Auth::user()->id;
         $registro = new Entrada_ropa();
         $donador=Donador::find($request->input('idDonador'));
         if ($donador){
@@ -68,6 +72,7 @@ class EntradaRopaController extends Controller
             $registro->cantidad=$request->input('cantidad');
             $registro->idRopa=$producto->id;
             $registro->idDonador=$donador->id;
+            $registro->encargadoRegistro=$perfil; 
             $registro->save();
         }
     }
@@ -88,4 +93,10 @@ class EntradaRopaController extends Controller
     public function destroy($id){
 
     }
+    public function registroAutentificacion(){
+        $perfil =Auth::user()->id;
+
+        return $perfil;
+    }
+
 }

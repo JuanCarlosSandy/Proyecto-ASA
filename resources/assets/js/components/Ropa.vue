@@ -174,6 +174,85 @@
         <!-- /.modal-dialog -->
     </div>
     <!--Fin del modal-->
+
+    <!--Inicio del modal agregar/actualizar-->
+    <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal2}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" v-text="tituloModal"></h4>
+                    <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        <div class="row" >
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                            <label  for="tipo_producto"><strong>Nombre Ropa</strong></label>
+                            
+                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre de la ropa" >
+                                
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_producto">Cantidad</label>
+                            
+                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0">
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        
+                        <div class="form-group">
+                            <label for="tipo_producto"><strong>Sexo</strong></label>
+                            <select id="sexo" v-model="sexo" class="form-control">
+                                <option value="0" disabled>Selecciona un sexo</option>
+                                <option value="femenino">Femenino</option>
+                                <option value="masculino">Masculino</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="tipo_producto"><strong>Talla</strong></label>
+                            <select id="idTallas" v-model="idTallas" class="form-control">
+                                <option value="0" disabled>Selecciona una Talla</option>
+                                <option value="XS"> XS</option>
+                                <option value="S"> S</option>
+                                <option value="M"> M</option>
+                                <option value="L"> L</option>
+                                <option value="XL"> XL</option>
+
+                            </select>
+                        </div>              
+                        
+                    </div>
+                        </div>
+                        <div v-show="errorProducto" class="form-group row div-error">
+                            <div class="text-center text-error">
+                                <div v-for="error in errorMostrarMsjProducto" :key="error" v-text="error">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                    <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProducto()">Actualizar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!--Fin del modal-->
+
+
 </main>
 </template>
 
@@ -201,6 +280,7 @@ export default {
             idCategoriaRopa :'',
             sexo : '',
             modal : 0,
+            modal2:0,
             tituloModal : '',
             tipoAccion : 0,
             errorProducto : 0,
@@ -216,6 +296,7 @@ export default {
             offset : 3,
             criterio : 'nombre',
             buscar : ''
+            
         }
     },
     computed:{
@@ -288,6 +369,8 @@ export default {
             }).catch(function (error) {
                 console.log("error"+error);
             });
+            const fecha = new Date()
+            console.log("fecha ",fecha);
             
         },
         actualizarProducto(){
@@ -324,6 +407,7 @@ export default {
             .catch(function(error) {
                 console.log(error);
             });
+            
         },
         obtenerDatosCategoriaRopa (){
             let me = this;
@@ -437,6 +521,7 @@ export default {
             this.opcionSeleccionada=false;
             this.opcionDonador= false;
             this.modal=0;
+            this.modal2=0;
             this.tituloModal='';
             this.nombre_producto='';
             this.cantidad='';
@@ -469,7 +554,7 @@ export default {
                             console.log("tallas "+ data['talla'] + typeof data['talla']);
                             console.log("sexo"+ data['sexo'] + typeof data['sexo']);
                             console.log("estacin" + data['estacion'] + typeof  data['estacion'])
-                            this.modal=1;
+                            this.modal2=1;
                             this.tituloModal='Actualizar Ropa - Vestimenta';
                             this.tipoAccion=2;
                             this.id=data['id'];
@@ -490,6 +575,7 @@ export default {
         this.obtenerDatosTallas();
         this.obtenerDatosCategoriaRopa();
         this.arrayDonadores=[];
+        
     }
     }
 </script>

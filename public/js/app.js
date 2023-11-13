@@ -59002,12 +59002,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -59017,7 +59011,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tipo_documento: '',
             num_documento: '',
             direccion: '',
-            telefono: '',
+            telefono: 0,
             email: '',
             usuario: '',
             password: '',
@@ -59600,10 +59594,6 @@ var render = function() {
                         domProps: { textContent: _vm._s(persona.rol) }
                       }),
                       _vm._v(" "),
-                      _c("td", {
-                        domProps: { textContent: _vm._s(persona.sucursal) }
-                      }),
-                      _vm._v(" "),
                       _c(
                         "td",
                         [
@@ -60136,66 +60126,6 @@ var render = function() {
                               staticClass: "form-control-label",
                               attrs: { for: "email-input" }
                             },
-                            [_vm._v("Sucursal")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.idsucursal,
-                                  expression: "idsucursal"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.idsucursal = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "option",
-                                { attrs: { value: "0", disabled: "" } },
-                                [_vm._v("Seleccione")]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(_vm.arraySucursal, function(sucursal) {
-                                return _c("option", {
-                                  key: sucursal.id,
-                                  domProps: {
-                                    value: sucursal.id,
-                                    textContent: _vm._s(sucursal.nombre)
-                                  }
-                                })
-                              })
-                            ],
-                            2
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "label",
-                            {
-                              staticClass: "form-control-label",
-                              attrs: { for: "email-input" }
-                            },
                             [_vm._v("Clave")]
                           ),
                           _vm._v(" "),
@@ -60383,8 +60313,6 @@ var staticRenderFns = [
         _c("th", [_vm._v("Usuario")]),
         _vm._v(" "),
         _c("th", [_vm._v("Rol")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Sucursal")]),
         _vm._v(" "),
         _c("th", [_vm._v("Opciones")])
       ])
@@ -60678,6 +60606,85 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -60702,6 +60709,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             idCategoriaRopa: '',
             sexo: '',
             modal: 0,
+            modal2: 0,
             tituloModal: '',
             tipoAccion: 0,
             errorProducto: 0,
@@ -60717,6 +60725,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             offset: 3,
             criterio: 'nombre',
             buscar: ''
+
         };
     },
 
@@ -60787,6 +60796,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }).catch(function (error) {
                 console.log("error" + error);
             });
+            var fecha = new Date();
+            console.log("fecha ", fecha);
         },
         actualizarProducto: function actualizarProducto() {
             if (this.validarProducto()) {
@@ -60915,6 +60926,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             this.opcionSeleccionada = false;
             this.opcionDonador = false;
             this.modal = 0;
+            this.modal2 = 0;
             this.tituloModal = '';
             this.nombre_producto = '';
             this.cantidad = '';
@@ -60949,7 +60961,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                                     console.log("tallas " + data['talla'] + _typeof(data['talla']));
                                     console.log("sexo" + data['sexo'] + _typeof(data['sexo']));
                                     console.log("estacin" + data['estacion'] + _typeof(data['estacion']));
-                                    this.modal = 1;
+                                    this.modal2 = 1;
                                     this.tituloModal = 'Actualizar Ropa - Vestimenta';
                                     this.tipoAccion = 2;
                                     this.id = data['id'];
@@ -61714,6 +61726,313 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        class: { mostrar: _vm.modal2 },
+        staticStyle: { display: "none" },
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "myModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-primary modal-lg",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h4", {
+                  staticClass: "modal-title",
+                  domProps: { textContent: _vm._s(_vm.tituloModal) }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Close" },
+                    on: {
+                      click: function($event) {
+                        _vm.cerrarModal()
+                      }
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "form",
+                  {
+                    staticClass: "form-horizontal",
+                    attrs: {
+                      action: "",
+                      method: "post",
+                      enctype: "multipart/form-data"
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(4),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.nombre_producto,
+                                expression: "nombre_producto"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "text",
+                              placeholder: "Nombre de la ropa"
+                            },
+                            domProps: { value: _vm.nombre_producto },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.nombre_producto = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "tipo_producto" } }, [
+                            _vm._v("Cantidad")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.cantidad,
+                                expression: "cantidad"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "number",
+                              placeholder: "Ingrese cantidad en números",
+                              min: "0"
+                            },
+                            domProps: { value: _vm.cantidad },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.cantidad = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(5),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.sexo,
+                                  expression: "sexo"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { id: "sexo" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.sexo = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "0", disabled: "" } },
+                                [_vm._v("Selecciona un sexo")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "femenino" } }, [
+                                _vm._v("Femenino")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "masculino" } }, [
+                                _vm._v("Masculino")
+                              ])
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(6),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.idTallas,
+                                  expression: "idTallas"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { id: "idTallas" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.idTallas = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "0", disabled: "" } },
+                                [_vm._v("Selecciona una Talla")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "XS" } }, [
+                                _vm._v(" XS")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "S" } }, [
+                                _vm._v(" S")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "M" } }, [
+                                _vm._v(" M")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "L" } }, [
+                                _vm._v(" L")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "XL" } }, [
+                                _vm._v(" XL")
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errorProducto,
+                            expression: "errorProducto"
+                          }
+                        ],
+                        staticClass: "form-group row div-error"
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "text-center text-error" },
+                          _vm._l(_vm.errorMostrarMsjProducto, function(error) {
+                            return _c("div", {
+                              key: error,
+                              domProps: { textContent: _vm._s(error) }
+                            })
+                          })
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.cerrarModal()
+                      }
+                    }
+                  },
+                  [_vm._v("Cerrar")]
+                ),
+                _vm._v(" "),
+                _vm.tipoAccion == 2
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.actualizarProducto()
+                          }
+                        }
+                      },
+                      [_vm._v("Actualizar")]
+                    )
+                  : _vm._e()
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -61744,6 +62063,30 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Opciones")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "tipo_producto" } }, [
+      _c("strong", [_vm._v("Sexo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "tipo_producto" } }, [
+      _c("strong", [_vm._v("Talla")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "tipo_producto" } }, [
+      _c("strong", [_vm._v("Nombre Ropa")])
     ])
   },
   function() {
@@ -65638,6 +65981,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -65664,7 +66034,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             offset: 3,
             criterio: 'nombre',
-            buscar: ''
+            buscar: '',
+            idTallas: '',
+            sexo: ''
         };
     },
 
@@ -65737,7 +66109,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
             });
         },
-        actualizarProducto: function actualizarProducto() {
+        actualizarHistorialRopa: function actualizarHistorialRopa() {
             if (this.validarProducto()) {
                 return;
             }
@@ -65752,17 +66124,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 me.cerrarModal();
                 me.listarProducto(1, '', 'nombre');
-            }).catch(function (error) {
-                console.log(error);
-            });
-        },
-        obtenerDatosCategoria: function obtenerDatosCategoria() {
-            var me = this;
-            var url = '/producto/obtenerDatosCategoria';
-            axios.get(url).then(function (response) {
-                var respuesta = response.data;
-                me.arrayCategorias = respuesta.categorias;
-                console.log("CATEGORIAS", me.arrayCategorias);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -65815,7 +66176,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
             switch (modelo) {
-                case "producto":
+                case "ropa":
                     {
                         switch (accion) {
                             case 'registrar':
@@ -65834,9 +66195,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                     this.tituloModal = 'Actualizar Producto';
                                     this.tipoAccion = 2;
                                     this.id = data['id'];
-                                    this.nombre_producto = data['nombre_producto'];
+                                    this.nombre_producto = data['nombre_ropa'];
                                     this.cantidad = data['cantidad'];
-                                    this.idCategoria_Alimentos = data['idCategoria_Alimentos'];
+                                    this.idTallas = data['talla'];
+                                    this.sexo = data['sexo'];
 
                                     break;
                                 }
@@ -65847,7 +66209,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         this.listarProducto(1, this.buscar, this.criterio);
-        this.obtenerDatosCategoria();
     }
 });
 
@@ -65983,6 +66344,14 @@ var render = function() {
                       domProps: { textContent: _vm._s(entrada.sexo) }
                     }),
                     _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(entrada.created_at) }
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(entrada.encargado) }
+                    }),
+                    _vm._v(" "),
                     _c("td", [
                       _c(
                         "button",
@@ -65991,7 +66360,7 @@ var render = function() {
                           attrs: { type: "button" },
                           on: {
                             click: function($event) {
-                              _vm.abrirModal("ropa", "actualizar", _vm.producto)
+                              _vm.abrirModal("ropa", "actualizar", entrada)
                             }
                           }
                         },
@@ -66161,132 +66530,186 @@ var render = function() {
                     }
                   },
                   [
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" }
-                        },
-                        [_vm._v("Nombre Producto")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.nombre_producto,
-                              expression: "nombre_producto"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            placeholder: "Nombre del Producto"
-                          },
-                          domProps: { value: _vm.nombre_producto },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(3),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.nombre_producto,
+                                expression: "nombre_producto"
                               }
-                              _vm.nombre_producto = $event.target.value
-                            }
-                          }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "email-input" }
-                        },
-                        [_vm._v("Cantidad")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.cantidad,
-                              expression: "cantidad"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "number",
-                            placeholder: "Ingrese cantidad en números"
-                          },
-                          domProps: { value: _vm.cantidad },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "text",
+                              placeholder: "Nombre de la ropa",
+                              disabled: true
+                            },
+                            domProps: { value: _vm.nombre_producto },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.nombre_producto = $event.target.value
                               }
-                              _vm.cantidad = $event.target.value
                             }
-                          }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _vm._m(3),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.idCategoria_Alimentos,
-                              expression: "idCategoria_Alimentos"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "idCategoria_Alimentos" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.idCategoria_Alimentos = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "", disabled: "" } }, [
-                            _vm._v("Selecciona una categoria")
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "tipo_producto" } }, [
+                            _vm._v("Cantidad")
                           ]),
                           _vm._v(" "),
-                          _vm._l(_vm.arrayCategorias, function(categorias) {
-                            return _c(
-                              "option",
+                          _c("input", {
+                            directives: [
                               {
-                                key: categorias.id,
-                                domProps: { value: categorias.id }
-                              },
-                              [_vm._v(_vm._s(categorias.tipo_producto))]
-                            )
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.cantidad,
+                                expression: "cantidad"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "number",
+                              placeholder: "Ingrese cantidad en números",
+                              min: "0"
+                            },
+                            domProps: { value: _vm.cantidad },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.cantidad = $event.target.value
+                              }
+                            }
                           })
-                        ],
-                        2
-                      )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(4),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.sexo,
+                                  expression: "sexo"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { id: "sexo" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.sexo = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "0", disabled: "" } },
+                                [_vm._v("Selecciona un sexo")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "femenino" } }, [
+                                _vm._v("Femenino")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "masculino" } }, [
+                                _vm._v("Masculino")
+                              ])
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(5),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.idTallas,
+                                  expression: "idTallas"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { id: "idTallas" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.idTallas = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "0", disabled: "" } },
+                                [_vm._v("Selecciona una Talla")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "XS" } }, [
+                                _vm._v(" XS")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "S" } }, [
+                                _vm._v(" S")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "M" } }, [
+                                _vm._v(" M")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "L" } }, [
+                                _vm._v(" L")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "XL" } }, [
+                                _vm._v(" XL")
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
                     ]),
                     _vm._v(" "),
                     _c(
@@ -66333,22 +66756,6 @@ var render = function() {
                   },
                   [_vm._v("Cerrar")]
                 ),
-                _vm._v(" "),
-                _vm.tipoAccion == 1
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            _vm.registrarProducto()
-                          }
-                        }
-                      },
-                      [_vm._v("Guardar")]
-                    )
-                  : _vm._e(),
                 _vm._v(" "),
                 _vm.tipoAccion == 2
                   ? _c(
@@ -66409,6 +66816,10 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Sexo")]),
         _vm._v(" "),
+        _c("th", [_vm._v("Fecha registro")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Encargado")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Opciones")])
       ])
     ])
@@ -66418,7 +66829,23 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "tipo_producto" } }, [
-      _c("strong", [_vm._v("Categoria")])
+      _c("strong", [_vm._v("Nombre Ropa")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "tipo_producto" } }, [
+      _c("strong", [_vm._v("Sexo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "tipo_producto" } }, [
+      _c("strong", [_vm._v("Talla")])
     ])
   }
 ]

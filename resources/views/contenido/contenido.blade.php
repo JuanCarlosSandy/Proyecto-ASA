@@ -66,6 +66,9 @@
             <template v-if="menu==8">
                 <donador></donador>
             </template>
+            <template v-if="menu==9">
+                <historialr></historialr>
+            </template>
 
 
 
