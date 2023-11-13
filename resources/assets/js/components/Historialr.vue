@@ -30,6 +30,8 @@
                             <th>Cantidad</th>
                             <th>Talla</th>
                             <th>Sexo</th>
+                            <th>Fecha registro</th>
+                            <th>Encargado</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
@@ -41,8 +43,10 @@
                             <td v-text="entrada.cantidad"></td>
                             <td v-text="entrada.talla"></td>
                             <td v-text="entrada.sexo"></td>
+                            <td v-text="entrada.created_at"></td>
+                            <td v-text="entrada.encargado"></td>
                             <td>
-                                <button type="button" @click="abrirModal('ropa','actualizar',producto)" class="btn btn-warning btn-sm">
+                                <button type="button" @click="abrirModal('ropa','actualizar',entrada)" class="btn btn-warning btn-sm">
                                   <i class="icon-pencil"></i>
                                 </button> &nbsp;                                
                                 <button type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(producto.id)">
@@ -72,6 +76,7 @@
         <!-- Fin ejemplo de tabla Listado -->
     </div>
     <!--Inicio del modal agregar/actualizar-->
+    <!--Inicio del modal agregar/actualizar-->
     <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-primary modal-lg" role="document">
             <div class="modal-content">
@@ -83,28 +88,50 @@
                 </div>
                 <div class="modal-body">
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="text-input">Nombre Producto</label>
-                            <div class="col-md-9">
-                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre del Producto">
-                                
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="email-input">Cantidad</label>
-                            <div class="col-md-9">
-                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números">
-                            </div>
-                        </div>
+                        <div class="row" >
+                            <div class="col-md-6">
 
+                                <div class="form-group">
+                            <label  for="tipo_producto"><strong>Nombre Ropa</strong></label>
+                            
+                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre de la ropa" :disabled="true">
+                                
+                            
+                        </div>
                         <div class="form-group">
-                            <label for="tipo_producto"><strong>Categoria</strong></label>
-                            <select id="idCategoria_Alimentos" v-model="idCategoria_Alimentos" class="form-control">
-                                <option value="" disabled>Selecciona una categoria</option>
-                                <option v-for="categorias in arrayCategorias" :key="categorias.id" :value="categorias.id">{{ categorias.tipo_producto }}</option>
-                            </select>
-                        </div>
+                            <label for="tipo_producto">Cantidad</label>
+                            
+                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0">
+                            
+                        </div>
                         
+                    </div>
+                    <div class="col-md-6">
+                        
+                        <div class="form-group">
+                            <label for="tipo_producto"><strong>Sexo</strong></label>
+                            <select id="sexo" v-model="sexo" class="form-control">
+                                <option value="0" disabled>Selecciona un sexo</option>
+                                <option value="femenino">Femenino</option>
+                                <option value="masculino">Masculino</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="tipo_producto"><strong>Talla</strong></label>
+                            <select id="idTallas" v-model="idTallas" class="form-control">
+                                <option value="0" disabled>Selecciona una Talla</option>
+                                <option value="XS"> XS</option>
+                                <option value="S"> S</option>
+                                <option value="M"> M</option>
+                                <option value="L"> L</option>
+                                <option value="XL"> XL</option>
+
+                            </select>
+                        </div>              
+                        
+                    </div>
+                        </div>
                         <div v-show="errorProducto" class="form-group row div-error">
                             <div class="text-center text-error">
                                 <div v-for="error in errorMostrarMsjProducto" :key="error" v-text="error">
@@ -117,7 +144,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                    <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarProducto()">Guardar</button>
                     <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProducto()">Actualizar</button>
                 </div>
             </div>
@@ -126,6 +152,7 @@
         <!-- /.modal-dialog -->
     </div>
     <!--Fin del modal-->
+
 </main>
 </template>
 
@@ -155,7 +182,9 @@ data (){
         },
         offset : 3,
         criterio : 'nombre',
-        buscar : ''
+        buscar : '',
+        idTallas:'',
+        sexo : ''
     }
 },
 computed:{
@@ -229,7 +258,7 @@ methods : {
             console.log(error);
         });
     },
-    actualizarProducto(){
+    actualizarHistorialRopa(){
        if (this.validarProducto()){
             return;
         }
@@ -249,18 +278,6 @@ methods : {
         }); 
     },
 
-    obtenerDatosCategoria (){
-                let me = this;
-                var url = '/producto/obtenerDatosCategoria';
-                axios.get(url).then(function(response) {
-                    var respuesta = response.data;
-                    me.arrayCategorias = respuesta.categorias;
-                    console.log("CATEGORIAS", me.arrayCategorias);
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
-            },
 
     eliminarProducto(id){
         swal({
@@ -315,7 +332,7 @@ methods : {
     },
     abrirModal(modelo, accion, data = []){
         switch(modelo){
-            case "producto":
+            case "ropa":
             {
                 switch(accion){
                     case 'registrar':
@@ -334,9 +351,10 @@ methods : {
                         this.tituloModal='Actualizar Producto';
                         this.tipoAccion=2;
                         this.id=data['id'];
-                        this.nombre_producto = data['nombre_producto'];
+                        this.nombre_producto = data['nombre_ropa'];
                         this.cantidad= data['cantidad'];
-                        this.idCategoria_Alimentos= data['idCategoria_Alimentos'];
+                        this.idTallas= data['talla'];
+                        this.sexo = data['sexo'];
 
                         break;
                     }
@@ -347,7 +365,7 @@ methods : {
 },
 mounted() {
     this.listarProducto(1,this.buscar,this.criterio);
-    this.obtenerDatosCategoria();
+    
 }
 }
 </script>
