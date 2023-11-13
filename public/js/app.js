@@ -59045,7 +59045,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             criterio: 'nombre',
             buscar: '',
             validEmail: true,
-            validTelefono: true
+            validarTelefono: true
         };
     },
 
@@ -59245,7 +59245,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         validatePhoneNumber: function validatePhoneNumber() {
             var pattern = /^[67]\d{7}$/;
-            this.validTelefono = pattern.test(this.telefono);
+            this.validarTelefono = pattern.test(this.telefono);
         },
         cerrarModal: function cerrarModal() {
             //Usando referencia en el file para limpiarlo al cerrar el modal
@@ -60850,7 +60850,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             console.log("data", this.arrayDonadores[0].nombre);
             console.log("data", this.arrayDonadores[0].idDonador);
             this.nombre_donador = persona.nombre;
-            this.idDonador = persona.idDonador;
+            this.idDonador = persona.id;
             console.log("id donador " + this.idDonador);
             this.opcionDonador = true;
         },
