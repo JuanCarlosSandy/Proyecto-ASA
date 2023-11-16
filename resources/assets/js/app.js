@@ -32,7 +32,10 @@ Vue.component('notification', require('./components/Notification.vue'));
 Vue.component('editarperfil', require('./components/EditarPerfil.vue'));
 Vue.component('historialp',require('./components/Historialp'));
 Vue.component('historialr',require('./components/Historialr'));
+Vue.component('salidaproducto', require('./components/SalidaProductos'));
 Vue.component('linea', require('./components/Linea.vue'));
+Vue.component('eventos', require('./components/Eventos.vue'));
+
 
 
 const app = new Vue({

@@ -134,7 +134,7 @@
                                 <option v-for="categorias in arrayCategorias" :key="categorias.id" :value="categorias.id">{{ categorias.tipo_producto }}</option>
                             </select>
                         </div>
-                        </div>
+                    </div>
 
                         <div v-show="errorProducto" class="form-group row div-error">
                             <div class="text-center text-error">

@@ -109,7 +109,25 @@ class ProductoController extends Controller
             $resultados =[];
         }
         return ['resultados' => $resultados];
-    }   
+    }
+
+    public function buscarProductoVenta(Request $request)
+    {
+        if (!$request->ajax())
+            return redirect('/');
+
+        $filtro = $request->filtro;
+
+        $articulos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+                    ->select('productos.id', 'productos.nombre_producto', 'productos.cantidad as stock','categoria_alimentos.tipo_producto')
+                    ->where('productos.id', '=', $filtro)
+                    ->orderBy('productos.nombre_producto', 'asc')->take(1)->get();
+        Log::info('ARTICULO:', [
+            'DATA' => $articulos,
+        ]);
+
+        return ['articulos' => $articulos];
+    }
 
     public function eliminar(Request $request, $id)
     {
@@ -123,6 +141,29 @@ class ProductoController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'No se pudo eliminar el producto'], 500);
         }
+    }
+
+    public function listarProductoVenta(Request $request)
+    {
+        if (!$request->ajax())
+            return redirect('/');
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if ($buscar == '') {
+            $articulos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+                ->select('productos.id', 'productos.idCategoria_Alimentos', 'productos.nombre_producto', 'categoria_alimentos.tipo_producto as nombre_categoria', 'productos.cantidad')
+                ->where('productos.cantidad', '>', '0')
+                ->orderBy('productos.id', 'desc')->paginate(10);
+        } else {
+            $articulos = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+                ->select('productos.id', 'productos.idCategoria_Alimentos', 'productos.nombre_producto', 'categoria_alimentos.tipo_producto as nombre_categoria', 'productos.cantidad')
+                ->where('productos.' . $criterio, 'like', '%' . $buscar . '%')
+                ->where('productos.cantidad', '>', '0')
+                ->orderBy('productos.id', 'desc')->paginate(10);
+        }
+        return ['articulos' => $articulos];
     }
 
 }
