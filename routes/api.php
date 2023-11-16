@@ -25,3 +25,4 @@ Route::get('/producto/mostrar','EntradaProductoController@show');
 Route::get('/donador/buscarDonador','DonadorController@buscarDonador');
 Route::get('/ropa','EntradaRopaController@index');
 
+Route::post('/salidaProductos/registrar', 'SalidaProductosController@store');

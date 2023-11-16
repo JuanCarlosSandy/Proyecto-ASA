@@ -444,10 +444,11 @@ export default {
             console.log("data",this.arrayDonadores[0].nombre)
             console.log("data",this.arrayDonadores[0].idDonador)
             this.nombre_donador = persona.nombre;
-            this.idDonador=persona.idDonador;
+            this.idDonador=persona.id;
             console.log("id donador "+this.idDonador );
             this.opcionDonador=true;
         },
+
         convertText() {
             let text = this.nombre_producto.trim();
             this.nombre_producto = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();

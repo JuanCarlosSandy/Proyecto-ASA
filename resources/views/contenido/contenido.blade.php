@@ -44,6 +44,13 @@
                 <configuracion></configuracion>
             </template>
             
+            <template v-if="menu==10">
+                <salidaproducto></salidaproducto>
+            </template>
+
+            <template v-if="menu==11">
+                <eventos></eventos>
+            </template>
 
 
             @elseif (Auth::user()->idrol == 2)
