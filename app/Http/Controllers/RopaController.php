@@ -43,8 +43,6 @@ class RopaController extends Controller
 
     public function store(Request $request)
     {
-        
-       
         $ropa = new Ropa();
         $ropa->nombre_ropa = $request->input('nombre_producto');
         $ropa->cantidad = $request->input('cantidad');

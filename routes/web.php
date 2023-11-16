@@ -97,6 +97,26 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/entradaProducto', 'EntradaProductocontroller@index');
         Route::post('/entradaProducto/registrar', 'EntradaProductoController@store');
 
+        Route::get('/salidaProductos', 'SalidaProductosController@index');
+        Route::get('/salidaProductos/obtenerCabecera', 'SalidaProductosController@obtenerCabecera');
+        Route::get('/salidaProductos/obtenerDetalles', 'SalidaProductosController@obtenerDetalles');
+        Route::post('/salidaProductos/registrar', 'SalidaProductosController@store');
+        Route::get('/salidaProductos/obtenerDatosEvento', 'SalidaProductosController@obtenerDatosEvento');
+
+
+        Route::get('/producto/listarProductoVenta', 'ProductoController@listarProductoVenta');
+        Route::get('/producto/buscarProductoVenta', 'ProductoController@buscarProductoVenta');
+
+        Route::get('/eventos', 'EventosController@index');
+        Route::post('/eventos/registrar', 'EventosController@store');
+        Route::put('/eventos/actualizar', 'EventosController@update');
+        Route::get('/eventos/selectCategoria', 'EventosController@selectEvento');
+
+
+
+
+
+
         
         //Rura para que el usuario pueda editar su perfil
         Route::get('/user/editarpersona', 'UserController@editarPersona');
