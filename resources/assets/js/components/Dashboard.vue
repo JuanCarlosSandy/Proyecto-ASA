@@ -1,6 +1,6 @@
 <template>
 <main class="main">
-    <!-- Breadcrumb -->
+    <!-- Breadcrumb  -->
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
     </ol>
@@ -47,7 +47,7 @@
             </div>
             <productosbajostock></productosbajostock>
         </div>
-    </div>
+    </div> 
 
 </main>
 </template>
@@ -66,6 +66,8 @@
                 ventas:[],
                 varTotalVenta:[],
                 varMesVenta:[],
+
+               
             }
         },
         methods : {
@@ -159,8 +161,8 @@
             }
         },
         mounted() {
-            this.getIngresos();
-            this.getVentas();
+            //this.getIngresos();
+            //this.getVentas();
         }
     }
 </script>

@@ -63597,6 +63597,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             ventas: [],
             varTotalVenta: [],
             varMesVenta: []
+
         };
     },
 
@@ -63689,8 +63690,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.getIngresos();
-        this.getVentas();
+        //this.getIngresos();
+        //this.getVentas();
     }
 });
 
