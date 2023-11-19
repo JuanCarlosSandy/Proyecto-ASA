@@ -29,15 +29,27 @@
                             <th>Nombre Donador</th>
                             <th>Cantidad</th>
                             <th>Categoria</th>
+                            <th>Fecha registro</th>
+                            <th>Encargado</th>
+                            <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="entrada in arrayEntradasProductos" >
+                        <tr v-for="entrada in arrayEntradasProductos" :key="entrada.idEntradaProducto" >
                             <td v-text="entrada.nombre_producto"></td>
                             <td v-text="entrada.nombre"></td>
                             <td v-text="entrada.cantidad"></td>
                             <td v-text="entrada.categoria"></td>
-
+                            <td v-text="entrada.created_at"></td>
+                            <td v-text="entrada.encargado"></td>
+                            <td>
+                                <button type="button" @click="abrirModal('producto','actualizar',entrada)" class="btn btn-warning btn-sm">
+                                  <i class="icon-pencil"></i>
+                                </button> &nbsp;                                
+                                
+                                        
+                                    
+                            </td>
                         </tr>                                
                     </tbody>
                 </table>
@@ -73,24 +85,16 @@
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="text-input">Nombre Producto</label>
                             <div class="col-md-9">
-                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre del Producto">
+                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre del Producto" :disabled="true">
                                 
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="email-input">Cantidad</label>
                             <div class="col-md-9">
-                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números">
+                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0">
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="tipo_producto"><strong>Categoria</strong></label>
-                            <select id="idCategoria_Alimentos" v-model="idCategoria_Alimentos" class="form-control">
-                                <option value="" disabled>Selecciona una categoria</option>
-                                <option v-for="categorias in arrayCategorias" :key="categorias.id" :value="categorias.id">{{ categorias.tipo_producto }}</option>
-                            </select>
-            </div>
                         
                         <div v-show="errorProducto" class="form-group row div-error">
                             <div class="text-center text-error">
@@ -142,7 +146,9 @@ data (){
         },
         offset : 3,
         criterio : 'nombre',
-        buscar : ''
+        buscar : '',
+        idProducto : 0
+
     }
 },
 computed:{
@@ -223,11 +229,11 @@ methods : {
         
         let me = this;
 
-        axios.put('/producto/actualizar',{
+        axios.put('/entradaProducto/actualizar',{
             'nombre_producto': this.nombre_producto,
             'cantidad': this.cantidad,
-            'id': this.id,
-            'idCategoria_Alimentos' : this.idCategoria_Alimentos
+            'idProducto': this.idProducto,
+            'idEntradaProducto' : this.id
         }).then(function (response) {
             me.cerrarModal();
             me.listarProducto(1,'','nombre');
@@ -249,7 +255,7 @@ methods : {
             });
             },
 
-    eliminarProducto(id){
+    eliminarProducto(id,idProducto){
         swal({
             title: '¿Está seguro de eliminar este producto?',
             type: 'warning',
@@ -266,7 +272,7 @@ methods : {
             if (result.value) {
                 let me = this;
 
-                axios.delete('/producto/eliminar/' + id)
+                axios.delete('/entradaProducto/eliminar/' + id +'/idProducto/'+idProducto)
                 .then(function (response) {
                     me.listarProducto(1, '', 'nombre');
                     swal(
@@ -320,11 +326,11 @@ methods : {
                         this.modal=1;
                         this.tituloModal='Actualizar Producto';
                         this.tipoAccion=2;
-                        this.id=data['id'];
+                        this.id=data['idEntradaProducto'];
                         this.nombre_producto = data['nombre_producto'];
                         this.cantidad= data['cantidad'];
                         this.idCategoria_Alimentos= data['idCategoria_Alimentos'];
-
+                        this.idProducto=data['idProducto'];
                         break;
                     }
                 }

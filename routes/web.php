@@ -44,7 +44,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/ropa/actualizar', 'RopaController@update');
         Route::delete('/ropa/eliminar/{id}', 'RopaController@eliminar');
         Route::get ('/ropa/buscarRopas','RopaController@buscarRopa');
-
+        Route::get('/ropa/obtenerDetalles', 'RopaController@obtenerDetalles');
+        Route::get('/ropa/buscarRopaVenta', 'RopaController@buscarRopaVenta');
+        Route::get('/ropa/listarRopaVenta', 'RopaController@listarRopaVenta');
+        Route::get ('/ropa/buscarRopasId','RopaController@buscarRopaId');
+        Route::get ('/ropa/buscarRopasNombre','RopaController@buscarRopaNombre');
+        Route::get('/ropas/ropasBajoStock', 'RopaController@ropasBajoStock');
 
         Route::get('/producto', 'ProductoController@index');
         Route::put('/producto/actualizar', 'ProductoController@update');
@@ -52,6 +57,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/producto/obtenerDatosCategoria', 'ProductoController@obtenerDatosCategoria');
         Route::get('/producto/buscarPersona', 'ProductoController@buscarPersona');
         Route::get('/producto/buscarProducto', 'ProductoController@buscarProducto');
+        Route::get('/producto/obtenerDetalles', 'ProductoController@obtenerDetalles');
+        Route::get('/productos/productosBajoStock', 'ProductoController@productosBajoStock');
+        Route::get ('/productos/buscarProductosId','ProductoController@buscarProductoId');
 
 
 
@@ -69,7 +77,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/donador/registrar','DonadorController@store');
         Route::post('/donador/actualizar', 'DonadorController@update');
         Route::get('/donador/buscarDonador','DonadorController@buscarDonador');
-        
+        Route::get('/donador/selectDonador', 'DonadorController@selectDonador');
         //Rutas de configuracion de trabajo
         Route::get('/configuracion/editar', 'ConfiguracionTrabajoController@edit');
         Route::put('/configuracion/actualizar', 'ConfiguracionTrabajoController@update');
@@ -92,20 +100,29 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/user/listarReporteUsuariosExcel', 'UserController@listarReporteUsuariosExcel');
 
         Route::post('/entradaRopa/registrar', 'EntradaRopacontroller@store');
-        Route::get('/entradaRopa', 'EntradaRopacontroller@index');
+        Route::get('/entradaRopa', 'EntradaRopaController@index');
+        Route::put('/entradaRopa/actualizar', 'EntradaRopaController@update');
+        //Route::delete('/entradaRopa/eliminar/{id}/idRopa/{idRopa}','EntradaRopaController@eliminar');
 
         Route::get('/entradaProducto', 'EntradaProductocontroller@index');
         Route::post('/entradaProducto/registrar', 'EntradaProductoController@store');
-
+        Route::put('/entradaProducto/actualizar', 'EntradaProductoController@update');
+        //Route::delete('/entradaProducto/eliminar/{id}/idProducto/{idProducto}', 'EntradaProductoController@eliminar');
         Route::get('/salidaProductos', 'SalidaProductosController@index');
         Route::get('/salidaProductos/obtenerCabecera', 'SalidaProductosController@obtenerCabecera');
         Route::get('/salidaProductos/obtenerDetalles', 'SalidaProductosController@obtenerDetalles');
         Route::post('/salidaProductos/registrar', 'SalidaProductosController@store');
         Route::get('/salidaProductos/obtenerDatosEvento', 'SalidaProductosController@obtenerDatosEvento');
 
+        Route::post('/salidaRopas/registrar', 'SalidaRopasController@store');
+        Route::get('/salidaRopas', 'SalidaRopasController@index');
+        Route::get('/salidaRopas/obtenerCabecera', 'SalidaRopasController@obtenerCabecera');
+        Route::get('/salidaRopas/obtenerDetalles', 'SalidaRopasController@obtenerDetalles');
+
 
         Route::get('/producto/listarProductoVenta', 'ProductoController@listarProductoVenta');
         Route::get('/producto/buscarProductoVenta', 'ProductoController@buscarProductoVenta');
+        
 
         Route::get('/eventos', 'EventosController@index');
         Route::post('/eventos/registrar', 'EventosController@store');

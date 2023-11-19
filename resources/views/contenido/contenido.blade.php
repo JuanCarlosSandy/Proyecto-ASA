@@ -51,7 +51,9 @@
             <template v-if="menu==11">
                 <eventos></eventos>
             </template>
-
+            <template v-if="menu==12">
+                <salidaropa></salidaropa>
+            </template>
 
             @elseif (Auth::user()->idrol == 2)
             <template v-if="menu==0">
@@ -81,7 +83,16 @@
             <template v-if="menu==9">
                 <historialr></historialr>
             </template>
+            <template v-if="menu==10">
+                <salidaproducto></salidaproducto>
+            </template>
 
+            <template v-if="menu==11">
+                <eventos></eventos>
+            </template>
+            <template v-if="menu==12">
+                <salidaropa></salidaropa>
+            </template>
 
 
       

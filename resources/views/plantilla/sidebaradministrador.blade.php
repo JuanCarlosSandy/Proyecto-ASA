@@ -57,7 +57,7 @@
                                 <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Salidas Producto</a>
                             </li>
 
-                            <li @click="menu=1000" class="nav-item">
+                            <li @click="menu=12" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-list" style="font-size: 11px;"></i> Salidas Ropas</a>
                             </li>
                         </ul>

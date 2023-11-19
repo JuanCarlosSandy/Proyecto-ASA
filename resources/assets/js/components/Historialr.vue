@@ -36,7 +36,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="entrada in arrayEntradasRopas" >
+                        <tr v-for="entrada in arrayEntradasRopas" :key="entrada.id">
                             
                             <td v-text="entrada.nombre_ropa"></td>
                             <td v-text="entrada.nombre"></td>
@@ -48,11 +48,7 @@
                             <td>
                                 <button type="button" @click="abrirModal('ropa','actualizar',entrada)" class="btn btn-warning btn-sm">
                                   <i class="icon-pencil"></i>
-                                </button> &nbsp;                                
-                                <button type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(producto.id)">
-                                    <i class="icon-trash"></i>
-                                </button>
-                                        
+                                </button> &nbsp;                                                          
                                     
                             </td>
                         </tr>                                
@@ -101,7 +97,7 @@
                         <div class="form-group">
                             <label for="tipo_producto">Cantidad</label>
                             
-                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0">
+                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0" >
                             
                         </div>
                         
@@ -110,7 +106,7 @@
                         
                         <div class="form-group">
                             <label for="tipo_producto"><strong>Sexo</strong></label>
-                            <select id="sexo" v-model="sexo" class="form-control">
+                            <select id="sexo" v-model="sexo" class="form-control" :disabled="true">
                                 <option value="0" disabled>Selecciona un sexo</option>
                                 <option value="femenino">Femenino</option>
                                 <option value="masculino">Masculino</option>
@@ -119,7 +115,7 @@
                     
                         <div class="form-group">
                             <label for="tipo_producto"><strong>Talla</strong></label>
-                            <select id="idTallas" v-model="idTallas" class="form-control">
+                            <select id="idTallas" v-model="idTallas" class="form-control" :disabled="true">
                                 <option value="0" disabled>Selecciona una Talla</option>
                                 <option value="XS"> XS</option>
                                 <option value="S"> S</option>
@@ -184,7 +180,8 @@ data (){
         criterio : 'nombre',
         buscar : '',
         idTallas:'',
-        sexo : ''
+        sexo : '',
+        idRopa:''
     }
 },
 computed:{
@@ -258,18 +255,20 @@ methods : {
             console.log(error);
         });
     },
-    actualizarHistorialRopa(){
+    actualizarProducto(){
        if (this.validarProducto()){
             return;
         }
         
         let me = this;
 
-        axios.put('/producto/actualizar',{
-            'nombre_producto': this.nombre_producto,
+        axios.put('/entradaRopa/actualizar',{
+            'nombreRopa': this.nombre_producto,
             'cantidad': this.cantidad,
-            'id': this.id,
-            'idCategoria_Alimentos' : this.idCategoria_Alimentos
+            'idEntradaRopa': this.id,
+            'idRopa':this.idRopa,
+            'sexo' : this.sexo,
+            'talla' :this.idTallas
         }).then(function (response) {
             me.cerrarModal();
             me.listarProducto(1,'','nombre');
@@ -279,7 +278,7 @@ methods : {
     },
 
 
-    eliminarProducto(id){
+    eliminarProducto(id,idRopa){
         swal({
             title: '¿Está seguro de eliminar este producto?',
             type: 'warning',
@@ -296,7 +295,7 @@ methods : {
             if (result.value) {
                 let me = this;
 
-                axios.delete('/producto/eliminar/' + id)
+                axios.delete('/entradaRopa/eliminar/' + id+'/idRopa/'+idRopa)
                 .then(function (response) {
                     me.listarProducto(1, '', 'nombre');
                     swal(
@@ -350,7 +349,8 @@ methods : {
                         this.modal=1;
                         this.tituloModal='Actualizar Producto';
                         this.tipoAccion=2;
-                        this.id=data['id'];
+                        this.id=data['idEntradaRopa'];
+                        this.idRopa = data['idRopa']
                         this.nombre_producto = data['nombre_ropa'];
                         this.cantidad= data['cantidad'];
                         this.idTallas= data['talla'];

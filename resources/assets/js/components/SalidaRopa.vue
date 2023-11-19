@@ -104,10 +104,10 @@
                         <div class="form-group row border">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Producto <span style="color: red;" v-show="idarticulo == 0">(*Seleccione Producto)</span></label>
+                                    <label>Ropa <span style="color: red;" v-show="idarticulo == 0">(*Seleccione Ropa)</span></label>
                                     <div class="form-inline">
                                         <input type="text" class="form-control" v-model="codigo" ref="articuloRef"
-                                            @keyup="buscarArticulo()" placeholder="Codigo del producto">
+                                            @keyup="buscarArticulo()" placeholder="Codigo de la ropa">
                                         <button @click="abrirModal()" class="btn btn-primary">...</button>
                                         <input type="text" id="nombre_producto" readonly class="form-control"
                                             v-model="articulo">
@@ -141,7 +141,8 @@
                                         <tr>
 
                                             <th>Producto</th>
-                                            <th>Categoria</th>
+                                            <th>Sexo</th>
+                                            <th>Talla</th>
                                             <th>Cantidad</th>
                                             <th>Opciones</th>
 
@@ -150,8 +151,9 @@
                                     <tbody v-if="arrayDetalle.length">
                                         <tr v-for="(detalle, index) in arrayDetalle" :key="detalle.id">
                                             
-                                            <td v-text="detalle.articulo"></td>
-                                            <td v-text="detalle.categoria"></td>
+                                            <td v-text="detalle.nombre_ropa"></td>
+                                            <td v-text="detalle.sexo"></td>
+                                            <td v-text="detalle.talla"></td>
 
                                             <td>
                                                 <span style="color:red;" v-show="detalle.cantidad > detalle.cantidad">Stock:
@@ -207,15 +209,22 @@
                                 <table class="table table-bordered table-striped table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Producto</th>
+                                            <th>Ropa</th>
                                             <th>Cantidad</th>
+                                            <th>Talla</th>
+                                            <th>Sexo</th>
+
                                         </tr>
                                     </thead>
                                     <tbody v-if="arrayDetalle.length">
                                         <tr v-for="detalle in arrayDetalle" :key="detalle.id">
-                                            <td v-text="detalle.producto">
+                                            <td v-text="detalle.nombre_ropa">
                                             </td>
                                             <td v-text="detalle.cantidad">
+                                            </td>
+                                            <td v-text="detalle.talla">
+                                            </td>
+                                            <td v-text="detalle.sexo">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -256,7 +265,7 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterioA">
-                                        <option value="nombre_producto">Nombre</option>      
+                                        <option value="nombre_ropa">Nombre</option>      
                                         <option value="id">Código</option>
                                     </select>
                                     <input type="text" v-model="buscarA" @keyup="listarArticulo(buscarA, criterioA)"
@@ -273,21 +282,23 @@
 
                                         <th>Código</th>
                                         <th>Nombre</th>
-                                        <th>Categoría</th>
                                         <th>Stock</th>
+                                        <th>Sexo</th>
+                                        <th>Talla</th>
                                         <th>Opciones</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="articulo in arrayArticulo" :key="articulo.id">
+                                    <tr v-for="ropa in arrayRopas" :key="ropa.id">
                                         
-                                        <td v-text="articulo.id"></td>
-                                        <td v-text="articulo.nombre_producto"></td>
-                                        <td v-text="articulo.nombre_categoria"></td>
-                                        <td v-text="articulo.cantidad"></td>
+                                        <td v-text="ropa.id"></td>
+                                        <td v-text="ropa.nombre_ropa"></td>
+                                        <td v-text="ropa.cantidad"></td>
+                                        <td v-text="ropa.sexo"></td>
+                                        <td v-text="ropa.talla"></td>
                                         <td>
-                                            <button type="button" @click="agregarDetalleModal(articulo)"
+                                            <button type="button" @click="agregarDetalleModal(ropa)"
                                                 class="btn btn-success btn-sm">
                                                 <i class="icon-check"></i>
                                             </button>
@@ -327,7 +338,7 @@ export default {
             evento : 0,
             arrayVenta: [],
             arrayDetalle: [],
-            arrayProductos: [],
+            arrayCantidadOriginal: [],
             arrayCategorias : [],
             listado: 1,
             modal: 0,
@@ -348,7 +359,7 @@ export default {
             buscar: '',
             criterioA: 'nombre',
             buscarA: '',
-            arrayArticulo: [],
+            arrayRopas: [],
             idarticulo: 0,
             codigo: '',
             articulo: '',
@@ -356,9 +367,10 @@ export default {
             cantidad: 1,
             cantidad: 0,
             cantidadDetalle : 0,
+            talla: '',
+            sexo: '',
             cantidadRopaId :0,
-            datos : [],
-            arrayCantidadOriginal:[]
+            datos : []
         }
     },
     components: {
@@ -446,9 +458,10 @@ export default {
                 });
         },
 
-        listarVenta(page, buscar, criterio) {
+        listarVenta(page, buscar, criterioA) {
             let me = this;
-            var url = '/salidaProductos?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+            console.log("estas entrando al metodo listar venta")
+            var url = '/salidaRopas?page=' + page + '&buscar=' + buscar + '&criterio=' + criterioA;
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 me.arrayVenta = respuesta.ventas.data;
@@ -462,22 +475,23 @@ export default {
 
         buscarArticulo() {
             let me = this;
-            var url = '/producto/buscarProductoVenta?filtro=' + me.codigo;
+            var url = '/ropa/buscarRopaVenta?filtro=' + me.codigo;
 
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
-                console.log("respuesta ",respuesta);
-                me.arrayArticulo = respuesta.articulos;
-                
-                if (me.arrayArticulo.length > 0) {
-                    me.articulo = me.arrayArticulo[0]['nombre_producto'];
-                    me.categoria = me.arrayArticulo[0]['tipo_producto'];
-                    me.idarticulo = me.arrayArticulo[0]['id'];
-                    me.cantidad = me.arrayArticulo[0]['stock'];
+                console.log(respuesta);
+                me.arrayRopas = respuesta.ropas;
+
+                if (me.arrayRopas.length > 0) {
+                    me.articulo = me.arrayRopas[0]['nombre_ropa'];
+                    me.sexo = me.arrayRopas[0]['sexo'];
+                    me.idRopa = me.arrayRopas[0]['id'];
+                    me.cantidad = me.arrayRopas[0]['stock'];
+                    me.talla = me.arrayRopas[0]['talla']
                 }
                 else {
                     me.articulo = 'No existe este articulo';
-                    me.idarticulo = 0;
+                    me.idRopa = 0;
                 }
             })
                 .catch(function (error) {
@@ -495,7 +509,7 @@ export default {
         encuentra(id) {
             var sw = 0;
             for (var i = 0; i < this.arrayDetalle.length; i++) {
-                if (this.arrayDetalle[i].idarticulo == id) {
+                if (this.arrayDetalle[i].idRopa == id) {
                     sw = true;
                 }
             }
@@ -506,45 +520,61 @@ export default {
             let me = this;
             me.arrayDetalle.splice(index, 1);
         },
-        async buscarProductoId(id) {
-            try {
-                let me = this;
-                let url = '/productos/buscarProductosId?id=' + id;
-
-                // Utilizamos async/await para esperar la respuesta de la API
-                let response = await axios.get(url);
-
-                // Procesamos la respuesta una vez que se completa la solicitud
-                let respuesta = response.data;
-                me.datos = respuesta.resultados;
-
-                console.log("datos async", me.datos);
-
-                // Puedes devolver datos o realizar otras acciones según tus necesidades
-                return me.datos;
-            } catch (error) {
-                console.log(error);
-                // Manejar el error según sea necesario
-                throw error; // Propaga el error para que pueda ser manejado por el código que llama a buscarRopaId
-            }
-        },
-        async agregarDetalle() {
+        /*buscarRopaId(id){
             let me = this;
+            var url = '/ropa/buscarRopasId?id=' + id;
+            axios.get(url).then(function (response) {
+                var respuesta = response.data;
+                me.datos = respuesta.resultados;
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },*/
+        async buscarRopaId(id) {
+    try {
+        let me = this;
+        let url = '/ropa/buscarRopasId?id=' + id;
 
-            if (me.idarticulo == 0 || me.cantidad == 0) 
+        // Utilizamos async/await para esperar la respuesta de la API
+        let response = await axios.get(url);
+
+        // Procesamos la respuesta una vez que se completa la solicitud
+        let respuesta = response.data;
+        me.datos = respuesta.resultados;
+
+        console.log("datos async", me.datos);
+
+        // Puedes devolver datos o realizar otras acciones según tus necesidades
+        return me.datos;
+    } catch (error) {
+        console.log(error);
+        // Manejar el error según sea necesario
+        throw error; // Propaga el error para que pueda ser manejado por el código que llama a buscarRopaId
+    }
+},
+        async agregarDetalle() {
+
+            let me = this;
+            
+            if (me.idRopa == 0 || me.cantidad == 0) 
             {
                 console.log("No hay nada")
             } else {
-                if (me.encuentra(me.idarticulo)) {
+                if (me.encuentra(me.idRopa)) {
                     swal({
                         type: 'error',
                         title: 'Error...',
                         text: 'Este Artículo ya se encuentra agregado!',
                     })
                 } else {
-                    await me.buscarProductoId(parseInt(me.idarticulo));
+                    
+                    await me.buscarRopaId(parseInt(me.idRopa));
+                    
                     let resultado = parseInt(me.cantidad) > me.datos[0].cantidad;
+                    
                     if (resultado) {
+                        
                         swal({
                             type: 'error',
                             title: 'Error...',
@@ -553,19 +583,21 @@ export default {
                     } else {
                         me.arrayDetalle.push({
                             idventa : me.idventa,
-                            idarticulo: me.idarticulo,
-                            articulo: me.articulo,
+                            idRopa: me.idRopa,
+                            nombre_ropa: me.articulo,
                             cantidad: me.cantidad,
-                            categoria : me.categoria
+                            sexo : me.sexo,
+                            talla : me.talla
                                                 });
 
                         me.arrayCantidadOriginal.push({
                             cantidad: me.cantidad,
                         });
                         me.codigo = '';
-                        me.articulo = '';
-                        me.categoria = '';
+                        me.nombre_ropa = '';
+                        me.sexo = '';
                         me.cantidad = '';
+                        me.talla = '';
                     }
                 }
 
@@ -582,10 +614,12 @@ export default {
                 })
             } else {
                 me.arrayDetalle.push({
-                    idarticulo: data['id'],
-                    articulo: data['nombre_producto'],
-                    categoria : data['nombre_categoria'],
-                    cantidad: data['cantidad']
+                    idRopa: data['id'],
+                    nombre_ropa: data['nombre_ropa'],
+                    sexo : data['sexo'],
+                    talla : data['talla'],
+                    cantidad: data['cantidad'],
+                    
                 });
                 me.arrayCantidadOriginal.push({
                             cantidad: data['cantidad'],
@@ -596,10 +630,10 @@ export default {
 
         listarArticulo(buscar, criterio) {
             let me = this;
-            var url = '/producto/listarProductoVenta?buscar=' + buscar + '&criterio=' + criterio;
+            var url = '/ropa/listarRopaVenta?buscar=' + buscar + '&criterio=' + criterio;
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
-                me.arrayArticulo = respuesta.articulos.data;
+                me.arrayRopas = respuesta.ropas.data;
             })
                 .catch(function (error) {
                     console.log(error);
@@ -641,7 +675,7 @@ export default {
 
             let me = this;
 
-            axios.post('/salidaProductos/registrar', {
+            axios.post('/salidaRopas/registrar', {
                 'evento': this.evento,
                 'data': this.arrayDetalle
 
@@ -650,7 +684,7 @@ export default {
                 if (response.data.id > 0) {
                     me.listarVenta(1, this.buscar, this.criterio);
                     me.evento = '';
-                    me.idarticulo = 0;
+                    me.idRopa = 0;
                     me.cantidad = 0;
                     me.arrayDetalle = [];
                     //window.open('/factura/imprimir/' + response.data.id);
@@ -675,9 +709,15 @@ export default {
             me.errorMostrarMsjVenta = [];
             let art;
 
+            /*me.arrayDetalle.map(function (x) {
+                if (x.cantidadOriginal < x.cantidad) {
+                    art = x.articulo + " cantidad insuficiente";
+                    me.errorMostrarMsjVenta.push(art);
+                }
+            });*/
             this.arrayDetalle.forEach((detalle, index) => {
                 if (detalle.cantidad > this.arrayCantidadOriginal[index].cantidad) {
-                    art = detalle.articulo + " cantidad insuficiente";
+                    art = detalle.nombre_ropa + " cantidad insuficiente";
                     
                     console.log("error ", art)
                     me.errorMostrarMsjVenta.push(art);
@@ -694,7 +734,7 @@ export default {
             me.listado = 0;
 
             me.evento = '';
-            me.idarticulo = 0;
+            me.idRopa = 0;
             me.articulo = '';
             me.cantidad = 0;
             me.arrayDetalle = [];
@@ -711,7 +751,7 @@ export default {
 
             //Obtener datos del ingreso
             var arrayVentaT = [];
-            var url = '/salidaProductos/obtenerCabecera?id=' + id;
+            var url = '/salidaRopas/obtenerCabecera?id=' + id;
 
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
@@ -725,7 +765,7 @@ export default {
                 });
 
             //obtener datos de los detalles
-            var url = '/salidaProductos/obtenerDetalles?id=' + id;
+            var url = '/salidaRopas/obtenerDetalles?id=' + id;
 
             axios.get(url).then(function (response) {
                 //console.log(response);
@@ -745,7 +785,7 @@ export default {
             if (this.idAlmacen == 0) {
                 return;
             }
-            this.arrayArticulo = [];
+            this.arrayRopas = [];
             this.modal = 1;
             this.tituloModal = 'Seleccione los articulos que desee';
         },

@@ -88,5 +88,17 @@ class DonadorController extends Controller
         }
         return ['resultados' => $resultados];
     }
+    public function selectDonador(Request $request){
+        
+ 
+        $filtro = $request->filtro;
+        $clientes = Donador::join ('personas','donadores.idPersona','=','personas.id')
+        ->where('personas.num_documento', 'like', '%'. $filtro . '%')
+        ->orWhere('personas.nombre', 'like', '%'. $filtro . '%')
+        ->select('donadores.id as idDonador','personas.nombre','personas.num_documento','personas.email')
+        ->orderBy('personas.nombre', 'asc')->get();
+ 
+        return ['resultados' => $clientes];
+    }
 
 }
