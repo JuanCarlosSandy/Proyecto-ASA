@@ -165,5 +165,51 @@ class ProductoController extends Controller
         }
         return ['articulos' => $articulos];
     }
+    public function productosBajoStock(Request $request)
+    {
+       
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if ($buscar == '') {
+            $productosBajo = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+                ->select('productos.*','categoria_alimentos.tipo_producto')
+                ->whereRaw('productos.cantidad < 10')
+                ->orderBy('productos.id', 'desc')->paginate(3);
+        } else {
+            $productosBajo = Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+                ->select('productos.*','categoria_alimentos.tipo_producto')
+                ->whereRaw('productos.cantidad < 10')
+                ->where('productos.' . $criterio, 'like', '%' . $buscar . '%')
+                ->orderBy('productos.id', 'desc')->paginate(3);
+        }
+
+
+        return [
+            'pagination' => [
+                'total' => $productosBajo->total(),
+                'current_page' => $productosBajo->currentPage(),
+                'per_page' => $productosBajo->perPage(),
+                'last_page' => $productosBajo->lastPage(),
+                'from' => $productosBajo->firstItem(),
+                'to' => $productosBajo->lastItem(),
+            ],
+            'productosBajo' => $productosBajo
+        ];
+    }
+    public function buscarProductoId(Request $request){
+        
+        $buscar = $request->id;
+        if ($buscar!=''){
+        $resultados =Producto::join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
+        ->select('productos.cantidad')
+        ->where ('productos.id','=',$buscar)->get ();
+        
+        }
+        else {
+            $resultados =[];
+        }
+        return ['resultados' => $resultados];
+    } 
 
 }

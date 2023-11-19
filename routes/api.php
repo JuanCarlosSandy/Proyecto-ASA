@@ -23,6 +23,21 @@ Route::put('/donador/actualizar','DonadorController@update');
 Route::post('/producto/registrar','EntradaProductoController@store');
 Route::get('/producto/mostrar','EntradaProductoController@show');
 Route::get('/donador/buscarDonador','DonadorController@buscarDonador');
-Route::get('/ropa','EntradaRopaController@index');
+Route::get('/ropa','RopaController@index');
+Route::get('/ropa/obtenerDetalles', 'RopaController@obtenerDetalles');
 
 Route::post('/salidaProductos/registrar', 'SalidaProductosController@store');
+
+Route::post('/salidaRopas/registrar', 'SalidaRopasController@store');
+Route::get('/salidaRopas', 'SalidaRopasController@index');
+Route::get('/salidaRopas/obtenerCabecera', 'SalidaRopasController@obtenerCabecera');
+Route::get('/salidaRopas/obtenerDetalles', 'SalidaRopasController@obtenerDetalles');
+
+Route::get ('/ropa/buscarRopasId','RopaController@buscarRopaId');
+Route::get ('/ropa/buscarRopasNombre','RopaController@buscarRopaNombre');
+Route::get('/dashboard', 'DashboardController');
+Route::get('/ropas/ropasBajoStock', 'RopaController@ropasBajoStock');
+Route::get('/donador/selectDonador', 'DonadorController@selectDonador');
+Route::get ('/productos/buscarProductosId','ProductoController@buscarProductoId');
+
+

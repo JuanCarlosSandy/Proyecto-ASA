@@ -13,4 +13,8 @@ class Eventos extends Model
     {
         return $this->hasMany('App\SalidaProducto');
     }
+    public function salidasRopas()
+    {
+        return $this->hasMany('App\SalidaRopas');
+    }
 }

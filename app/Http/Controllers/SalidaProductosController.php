@@ -25,7 +25,7 @@ class SalidaProductosController extends Controller
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
-        $usuario = \Auth::user();
+        $usuario = Auth::user();
 
         if ($buscar == '') {
             $ventas = SalidaProducto::join('users', 'salidas_productos.encargadoRegistro', '=', 'users.id')

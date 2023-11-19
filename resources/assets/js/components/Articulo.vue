@@ -28,16 +28,22 @@
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>Opciones</th>
+                            
                             <th>N°</th>
                             <th>Nombre</th>
                             <th>Cantidad</th>
                             <th>Categoría</th>
+                            <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="producto in arrayProducto" :key="producto.id">
-                            <td>
+                           
+                            <td v-text="producto.id"></td>
+                            <td v-text="producto.nombre_producto"></td>
+                            <td v-text="producto.cantidad"></td>
+                            <td v-text="producto.categoria"></td>
+                             <td>
                                 <button type="button" @click="abrirModal('producto','actualizar',producto)" class="btn btn-warning btn-sm">
                                   <i class="icon-pencil"></i>
                                 </button> &nbsp;                                
@@ -47,11 +53,6 @@
                                         
                                     
                             </td>
-                            <td v-text="producto.id"></td>
-                            <td v-text="producto.nombre_producto"></td>
-                            <td v-text="producto.cantidad"></td>
-                            <td v-text="producto.categoria"></td>
-                            
                         </tr>                                
                     </tbody>
                 </table>
@@ -90,11 +91,11 @@
                             <div class="form-group row">
                             <div class="col-md-9">
                                     <label for="num_documento"><strong>DONADOR</strong></label>
-                                    <input type="text" v-model="num_documento" @input="buscarPersonasCI" placeholder="Buscar CI">
-                                    <ul>
-                                        <li v-for="donante in arrayDonador" @click="seleccionarPersona(donante)">{{ donante.num_documento }}</li>
-                                        <li v-if="arrayDonador.length === 0 && num_documento.length === 0">No se encontraron resultados</li>
-                                    </ul>
+                                    <div class="form-group">
+                                    <v-select :on-search="buscarPersonasCI" label="num_documento" :options="arrayDonador"
+                                        placeholder="Buscar Clientes..." :onChange="seleccionarPersona">
+                                    </v-select>
+                                </div>
                                 </div>
                             </div>
 
@@ -158,10 +159,64 @@
         <!-- /.modal-dialog -->
     </div>
     <!--Fin del modal-->
+
+    <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal2}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" v-text="tituloModal"></h4>
+                    <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        <div class="row" >
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                            <label  for="tipo_producto"><strong>Nombre Producto</strong></label>
+                            
+                                <input type="text" v-model="nombre_p" class="form-control" placeholder="Nombre del producto" >    
+                            
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo_producto"><strong>Categoria</strong></label>
+                                    <select id="idCategoria_Alimentos" v-model="idCategoria_Alimentos" class="form-control">
+                                        <option value="" disabled>Selecciona una categoria</option>
+                                        <option v-for="categorias in arrayCategorias" :key="categorias.id" :value="categorias.id">{{ categorias.tipo_producto }}</option>
+                                    </select>
+                                </div>
+                        
+                    </div>
+                        </div>
+                        <div v-show="errorProducto" class="form-group row div-error">
+                            <div class="text-center text-error">
+                                <div v-for="error in errorMostrarMsjProducto" :key="error" v-text="error">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                    <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProducto()">Actualizar</button>
+                </div>
+                
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 </main>
 </template>
 
 <script>
+import vSelect from 'vue-select';
 export default {
 data (){
     return {
@@ -182,6 +237,7 @@ data (){
         idDonador : 0,
         idCategoria_Alimentos : 0,
         modal : 0,
+        modal2 : 0,
         tituloModal : '',
         tipoAccion : 0,
         errorProducto : 0,
@@ -199,6 +255,9 @@ data (){
         buscar : ''
     }
 },
+components: {
+        vSelect
+    },
 computed:{
     isActived: function(){
         return this.pagination.current_page;
@@ -255,7 +314,7 @@ methods : {
             this.convertText();
             let me = this;
             axios.post('/entradaProducto/registrar',{
-                'idDonador':this.arrayDonador[0].idDonador,
+                'idDonador':this.idDonador,
                 'idProducto' :this.idProducto,
                 'nombre_producto' : this.nombre_p,
                 'cantidad' : this.cantidad,
@@ -304,7 +363,7 @@ methods : {
             });
             },
 
-    buscarPersonasCI(){
+    /*buscarPersonasCI(){
                 if (this.num_documento === '') {
                     this.arrayDonador =[];
                     this.num_documento =''; 
@@ -319,8 +378,30 @@ methods : {
                     console.log(error);
                 });
                 
+            },*/
+            async buscarPersonasCI(search,loading){
+                console.log("ingresando a buscar personas");
+                let me = this;
+                console.log("search ", search);
+                console.log("loading ", loading);
+                loading(true)
+                var url = '/donador/selectDonador?filtro=' + search;
+                try {
+                    const response = await axios.get(url);
+                    let respuesta = response.data;
+                    me.arrayDonador = respuesta.resultados;
+                    console.log(me.arrayDonador);
+                    
+                    q:search;
+                    loading(false);
+                    // Puedes devolver los resultados si es necesario
+                } catch (error) {
+                    console.error(error);
+                    // Manejar el error según sea necesario
+                }       
+
+                
             },
-    
     buscarProducto(){         
             let me = this;
             axios.get('/producto/buscarProducto',{ params: { nombre_producto: this.nombre_p } }).then(function(response){
@@ -345,8 +426,10 @@ methods : {
     seleccionarPersona(donante) {
             this.num_documento='';
             this.nombre_donador = donante.nombre;
+            this.idDonador=donante.idDonador;
             this.num_documento = donante.num_documento; // Autocompletar el campo de texto
             this.selectedDonante=true;
+            this.arrayDonadores =[];
         },
 
 
@@ -398,6 +481,7 @@ methods : {
 
     cerrarModal(){
         this.modal=0;
+        this.modal2=0;
         this.tituloModal='';
         this.nombre_p='';
         this.cantidad='';
@@ -426,7 +510,7 @@ methods : {
                     case 'actualizar':
                     {
                         //console.log(data);
-                        this.modal=1;
+                        this.modal2=1;
                         this.tituloModal='Actualizar Producto';
                         this.tipoAccion=2;
                         this.id=data['id'];

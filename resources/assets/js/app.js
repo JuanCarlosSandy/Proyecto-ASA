@@ -28,11 +28,13 @@ Vue.component('ropa',require('./components/Ropa.vue'))
 Vue.component('donador',require('./components/Donador.vue'))
 Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('notification', require('./components/Notification.vue'));
-
+Vue.component('ropasbajostock', require('./components/RopaBajoStock.vue'));
+Vue.component('productosbajostock',require('./components/ProductoBajoStock.vue'));
 Vue.component('editarperfil', require('./components/EditarPerfil.vue'));
 Vue.component('historialp',require('./components/Historialp'));
 Vue.component('historialr',require('./components/Historialr'));
 Vue.component('salidaproducto', require('./components/SalidaProductos'));
+Vue.component('salidaropa',require('./components/SalidaRopa.vue'))
 Vue.component('linea', require('./components/Linea.vue'));
 Vue.component('eventos', require('./components/Eventos.vue'));
 

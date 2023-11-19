@@ -32,8 +32,7 @@
                             
                             <th>Nombre</th>
                             <th>Cantidad</th>
-                            <th>Sexo</th>
-                            <th>Talla</th>
+                            
                             <th>Opciones</th>
                         </tr>
                     </thead>
@@ -42,9 +41,7 @@
                             
                             
                             <td v-text="producto.nombre_ropa"></td>
-                            <td v-text="producto.cantidad"></td>
-                            <td v-text="producto.sexo"></td>
-                            <td v-text="producto.talla"></td>
+                            <td v-text="producto.total"></td>
                             <td>
                                 <button type="button" @click="abrirModal('ropa','actualizar',producto)" class="btn btn-warning btn-sm">
                                   <i class="icon-pencil"></i>
@@ -52,6 +49,10 @@
                                 <button type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(producto.id)">
                                     <i class="icon-trash"></i>
                                 </button>
+                                <button type="button" @click="verRopa(producto.nombre_ropa),abrirModal('ropa','detalles')"
+                                    class="btn btn-success btn-sm">
+                                    <i class="icon-eye"></i>
+                                </button> &nbsp;
                                         
                                     
                             </td>
@@ -93,11 +94,11 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="tipo_producto">Buscador CI</label>
                                     <div class="col-md-9">
-                                    <input type="text-input" v-model="buscarCI" @input="buscarPersonasCI" > 
-                                    <ul>
-                                        <li v-for="result in arrayDonadores" @click="selectPerson(result)">{{ result.nombre }}</li>
-                                        <li v-if="arrayDonadores.length === 0 && buscarCI.length === 0">No se encontraron resultados</li>
-                                    </ul>
+                                        <div class="form-group">
+                                    <v-select :on-search="buscarPersonasCI" label="num_documento" :options="arrayDonadores"
+                                        placeholder="Buscar Clientes..." :onChange="selectPerson">
+                                    </v-select>
+                                </div>
                                 </div>
                                 </div>
                                 <div class="form-group row">
@@ -193,41 +194,9 @@
                                 <div class="form-group">
                             <label  for="tipo_producto"><strong>Nombre Ropa</strong></label>
                             
-                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre de la ropa" >
-                                
+                                <input type="text" v-model="nombre_producto" class="form-control" placeholder="Nombre de la ropa" >    
                             
                         </div>
-                        <div class="form-group">
-                            <label for="tipo_producto">Cantidad</label>
-                            
-                                <input type="number" v-model="cantidad" class="form-control" placeholder="Ingrese cantidad en números" min="0">
-                            
-                        </div>
-                        
-                    </div>
-                    <div class="col-md-6">
-                        
-                        <div class="form-group">
-                            <label for="tipo_producto"><strong>Sexo</strong></label>
-                            <select id="sexo" v-model="sexo" class="form-control">
-                                <option value="0" disabled>Selecciona un sexo</option>
-                                <option value="femenino">Femenino</option>
-                                <option value="masculino">Masculino</option>
-                            </select>
-                        </div>
-                    
-                        <div class="form-group">
-                            <label for="tipo_producto"><strong>Talla</strong></label>
-                            <select id="idTallas" v-model="idTallas" class="form-control">
-                                <option value="0" disabled>Selecciona una Talla</option>
-                                <option value="XS"> XS</option>
-                                <option value="S"> S</option>
-                                <option value="M"> M</option>
-                                <option value="L"> L</option>
-                                <option value="XL"> XL</option>
-
-                            </select>
-                        </div>              
                         
                     </div>
                         </div>
@@ -241,10 +210,72 @@
 
                     </form>
                 </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                     <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProducto()">Actualizar</button>
                 </div>
+                
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!--Fin del modal-->
+
+
+    <!--Inicio del modal agregar/actualizar-->
+    <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal3}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" v-text="tituloModal"></h4>
+                    <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                <table class="table table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>
+                            
+                            <th>Codigo</th>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>Talla</th>
+                            <th>Sexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="producto in arrayDetalle" :key="producto.id">
+                            
+                            <td v-text="producto.id"></td>
+                            <td v-text="producto.nombre_ropa"></td>
+                            <td v-text="producto.cantidad"></td>
+                            <td v-text="producto.talla"></td>
+                            <td v-text="producto.sexo"></td>
+                            
+                        </tr>                                
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item" v-if="pagination.current_page > 1">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
+                        </li>
+                        <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
+                        </li>
+                        <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                    <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProducto()">Actualizar</button>
+                </div>
+            </div>
             </div>
             <!-- /.modal-content -->
         </div>
@@ -257,10 +288,12 @@
 </template>
 
 <script>
+import vSelect from 'vue-select';
 export default {
     data (){
         return {
             id: 0,
+            nombre:'',
             idRopa: 0,
             opcionDonador:false,
             opcionSeleccionada: false,
@@ -281,6 +314,7 @@ export default {
             sexo : '',
             modal : 0,
             modal2:0,
+            modal3: 0,
             tituloModal : '',
             tipoAccion : 0,
             errorProducto : 0,
@@ -295,9 +329,15 @@ export default {
             },
             offset : 3,
             criterio : 'nombre',
-            buscar : ''
+            buscar : '',
+            arrayDetalle : [],
+            nombreOriginal: '',
+            arrayIds:[]
             
         }
+    },
+    components: {
+        vSelect
     },
     computed:{
         isActived: function(){
@@ -356,7 +396,7 @@ export default {
             this.convertText();
             let me = this;
             axios.post('/entradaRopa/registrar',{
-                'idDonador':this.arrayDonadores[0].idDonador,
+                'idDonador':this.idDonador,
                 'idRopa' :this.idRopa,
                 'nombre_ropa' : this.nombre_producto,
                 'cantidad' : this.cantidad,
@@ -369,23 +409,45 @@ export default {
             }).catch(function (error) {
                 console.log("error"+error);
             });
-            const fecha = new Date()
-            console.log("fecha ",fecha);
+            
             
         },
-        actualizarProducto(){
+         async ropasNombre(nombre){
+            try {
+        let me = this;
+        let url = '/ropa/buscarRopasNombre?nombre=' + nombre;
+
+        // Utilizamos async/await para esperar la respuesta de la API
+        let response = await axios.get(url);
+
+        // Procesamos la respuesta una vez que se completa la solicitud
+        let respuesta = response.data;
+        me.arrayIds = respuesta.resultados;
+
+        console.log("datos async", me.arrayIds);
+
+        // Puedes devolver datos o realizar otras acciones según tus necesidades
+        return me.arrayIds;
+    } catch (error) {
+        console.log(error);
+        // Manejar el error según sea necesario
+        throw error; // Propaga el error para que pueda ser manejado por el código que llama a buscarRopaId
+    }
+        },
+        async actualizarProducto(){
             if (this.validarProducto()){
                 return;
             }
+            await this.ropasNombre(this.nombreOriginal);
             this.convertText();
             let me = this;
-            axios.put('/ropa/actualizar',{
-                'nombre_producto': this.nombre_producto,
+            axios.put('/ropa/actualizar',{ datos: this.arrayIds,nombre_ropa:this.nombre_producto
+                /*'nombre_producto': this.nombre_producto,
                 'cantidad': this.cantidad,
                 'idTallas' : this.idTallas,
                 'sexo': this.sexo,
                 'idCategoriaRopa': this.idCategoriaRopa,
-                'id':this.id
+                'id':this.id*/
             }).then(function (response) {
                 alert("Datos actualizados con éxito");
                 me.cerrarModal();
@@ -393,7 +455,8 @@ export default {
             }).catch(function (error) {
                 console.log(error);
             });
-             
+            console.log("nombre ropa actualizado ",this.nombre_producto);
+            console.log("nombre ropa array ",this.arrayIds);
         },
 
         obtenerDatosTallas (){
@@ -421,13 +484,15 @@ export default {
                 console.log(error);
             });
         },
-        buscarPersonasCI(){
+        /*buscarPersonasCI(search,loading){
             if (this.buscarCI === '') {
                 this.arrayDonadores =[];
                 this.buscarCI =''; 
                 return;
             }
+            
             let me = this;
+            loading(true)
             axios.get('/donador/buscarDonador',{ params: { ci: this.buscarCI } }).then(function(response){
                 var respuesta = response.data;
                 me.arrayDonadores= respuesta.resultados;
@@ -438,15 +503,42 @@ export default {
                 console.log(error);
             });
             
+        },*/
+        async buscarPersonasCI(search,loading){
+            console.log("ingresando a buscar personas");
+            let me = this;
+            console.log("search ", search);
+            console.log("loading ", loading);
+            loading(true)
+            var url = '/donador/selectDonador?filtro=' + search;
+            try {
+                const response = await axios.get(url);
+                let respuesta = response.data;
+                me.arrayDonadores = respuesta.resultados;
+                console.log(me.arrayDonadores);
+                
+                q:search;
+                loading(false);
+                // Puedes devolver los resultados si es necesario
+            } catch (error) {
+                console.error(error);
+                // Manejar el error según sea necesario
+    }       
+
+            
         },
+
         selectPerson(persona){
-            this.buscarCI='';
+            let me =this;
+            
+            
             console.log("data",this.arrayDonadores[0].nombre)
-            console.log("data",this.arrayDonadores[0].idDonador)
+            console.log("data",persona.idDonador)
             this.nombre_donador = persona.nombre;
-            this.idDonador=persona.id;
+            this.idDonador=persona.idDonador;
             console.log("id donador "+this.idDonador );
             this.opcionDonador=true;
+            this.arrayDonadores =[];
         },
 
         convertText() {
@@ -471,7 +563,22 @@ export default {
             this.opcionSeleccionada = true;
             console.log("id donador "+this.idDonador )
         },
+        verRopa(nombre) {
+            let me = this;
+            
+            //obtener datos de los detalles
+            var url = '/ropa/obtenerDetalles?nombre=' + nombre;
+            axios.get(url).then(function (response) {
+                //console.log(response);
+                var respuesta = response.data;
+                me.arrayDetalle = respuesta.detalles;
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
 
+            
+        },
         eliminarProducto(id){
             swal({
                 title: '¿Está seguro de eliminar este producto?',
@@ -522,6 +629,7 @@ export default {
             this.opcionDonador= false;
             this.modal=0;
             this.modal2=0;
+            this.modal3=0;
             this.tituloModal='';
             this.nombre_producto='';
             this.cantidad='';
@@ -534,7 +642,7 @@ export default {
                         case 'registrar':
                         {
                             this.nombre_donador='';
-                            this.arrayDonadores=[];
+                            
                             this.modal = 1;
                             this.tituloModal = 'Registrar Ropa - Vestimenta';
                             this.nombre_producto= '';
@@ -554,6 +662,8 @@ export default {
                             console.log("tallas "+ data['talla'] + typeof data['talla']);
                             console.log("sexo"+ data['sexo'] + typeof data['sexo']);
                             console.log("estacin" + data['estacion'] + typeof  data['estacion'])
+                            
+
                             this.modal2=1;
                             this.tituloModal='Actualizar Ropa - Vestimenta';
                             this.tipoAccion=2;
@@ -562,8 +672,17 @@ export default {
                             this.cantidad= data['cantidad'];
                             this.idTallas= data['talla'];
                             this.sexo=data['sexo'];
-                            this.idCategoriaRopa=data['estacion']
+                            this.idCategoriaRopa=data['estacion'];
+                            this.nombreOriginal = data['nombre_ropa'];
+                            console.log("nombre original" , this.nombreOriginal)
+
                             break;
+                        }
+                        case 'detalles':
+                        {
+                            this.modal3=1;
+                            this.tituloModal='Mostrar Detalles';
+
                         }
                     }
                 }
@@ -574,7 +693,8 @@ export default {
         this.listarProducto(1,this.buscar,this.criterio);
         this.obtenerDatosTallas();
         this.obtenerDatosCategoriaRopa();
-        this.arrayDonadores=[];
+        
+    
         
     }
     }

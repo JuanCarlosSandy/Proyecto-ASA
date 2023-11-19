@@ -6,6 +6,7 @@ use App\Donador;
 use App\Entrada_producto;
 use App\Categoria_Alimentos;
 use App\Producto;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class EntradaProductoController extends Controller
@@ -20,7 +21,8 @@ class EntradaProductoController extends Controller
             ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
             ->join('personas', 'donadores.idPersona', '=', 'personas.id')
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
-            ->select('productos.nombre_producto', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria','entrada_productos.cantidad')
+            ->join('users','entrada_productos.encargadoRegistro','=','users.id')
+            ->select('productos.nombre_producto','productos.id as idProducto','entrada_productos.id as idEntradaProducto', 'donadores.idPersona', 'personas.nombre','categoria_alimentos.tipo_producto as categoria','entrada_productos.cantidad','entrada_productos.created_at','users.usuario as encargado')
             ->orderBy('entrada_productos.id','desc')
             ->paginate(10);
 
@@ -31,7 +33,8 @@ class EntradaProductoController extends Controller
             ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
             ->join('personas', 'donadores.idPersona', '=', 'personas.id')
             ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')
-            ->select('productos.nombre_producto', 'donadores.*', 'personas.*','categoria_alimentos.tipo_producto as categoria','entrada_productos.cantidad')
+            ->join('users','entrada_productos.encargadoRegistro','=','users.id')
+            ->select('productos.nombre_producto','productos.id as idProducto','entrada_productos.id as idEntradaProducto', 'donadores.idPersona', 'personas.nombre','categoria_alimentos.tipo_producto as categoria','entrada_productos.cantidad','entrada_productos.created_at','users.usuario as encargado')
             ->orderBy('entrada_productos.id','desc')
             ->paginate(10);
 
@@ -101,10 +104,33 @@ class EntradaProductoController extends Controller
     public function edit($id){
         
     }
-    public function update(Request $request, $id){
+    public function update(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        $producto = Producto::findOrFail($request->idProducto);
+        $entradaProducto = Entrada_producto::findOrFail($request->idEntradaProducto);
+        $producto->nombre_producto = $request->nombre_producto;
 
-    }   
-    public function destroy($id){
 
+        $producto->cantidad -= $entradaProducto->cantidad;
+        $entradaProducto->cantidad = $request->cantidad;
+        $producto->cantidad+=$request->cantidad;
+        $entradaProducto->save();
+        $producto->save();
+    }  
+    public function eliminar(Request $request, $id, $idProducto){
+        if (!$request->ajax()) return redirect('/');
+
+        try {
+            $entradaProducto = Entrada_producto::findOrFail($id);
+            $producto = Producto::findOrFail($idProducto);
+            $producto->cantidad -= $entradaProducto->cantidad;
+            $producto->save();
+            $entradaProducto->delete();
+
+            return response()->json(['message' => 'Producto eliminado correctamente']);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'No se pudo eliminar el producto'], 500);
+        }
     }
 }
