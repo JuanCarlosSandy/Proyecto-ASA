@@ -37,6 +37,8 @@ Vue.component('salidaproducto', require('./components/SalidaProductos'));
 Vue.component('salidaropa',require('./components/SalidaRopa.vue'))
 Vue.component('linea', require('./components/Linea.vue'));
 Vue.component('eventos', require('./components/Eventos.vue'));
+Vue.component('reportesalidap', require('./components/ReporteDonacionProductos.vue'));
+
 
 
 

@@ -16,9 +16,15 @@
                         <div class="input-group">
                             <select class="form-control col-md-3" v-model="criterio">
                               <option value="nombre_producto">Nombre</option>
+                              <option value="created_at">Fecha</option>
+
                             </select>
                             <input type="text" v-model="buscar" @keyup.enter="listarProducto(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                             <button type="submit" @click="listarProducto(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+
+                            <button type="button" @click="pdfVenta()" class="btn btn-info btn-sm">
+                                            <i class="icon-doc"></i>
+                                            </button>
                         </div>
                     </div>
                 </div>
@@ -181,6 +187,18 @@ computed:{
     }
 },
 methods : {
+
+    pdfVenta(){
+            axios.get('/entradaProducto/imprimir', { responseType: 'blob' })
+                .then(function(response) {
+                window.location.href = "docs/entrada.pdf";
+                console.log("Se generó el PDF correctamente");
+                })
+                .catch(function(error) {
+                console.log(error);
+                });
+            },
+
     listarProducto (page,buscar,criterio){
         let me=this;
         var url= '/entradaProducto?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;

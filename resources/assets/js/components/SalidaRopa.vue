@@ -20,13 +20,11 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="evento">Evento</option>
+                                        <option value="nombre_evento">Evento</option>
                                         <option value="fecha_hora">Fecha-Hora</option>
                                     </select>
                                     <input type="text" v-model="buscar" @keyup="listarVenta(1, buscar, criterio)"
                                         class="form-control" placeholder="Texto a buscar">
-                                    <!--button type="submit" @click="listarVenta(1, buscar, criterio)" class="btn btn-primary"><i
-                                            class="fa fa-search"></i> Buscar</button-->
                                 </div>
                             </div>
                         </div>
@@ -158,7 +156,7 @@
                                             <td>
                                                 <span style="color:red;" v-show="detalle.cantidad > detalle.cantidad">Stock:
                                                     {{ detalle.cantidad }}</span>
-                                                <input v-model="detalle.cantidad" type="number" class="form-control">
+                                                <input v-model="detalle.cantidad" type="number" class="form-control" min="0">
                                             </td>   
                                             <td>
                                                 <button @click="eliminarDetalle(index)" type="button"
@@ -722,7 +720,18 @@ export default {
                     console.log("error ", art)
                     me.errorMostrarMsjVenta.push(art);
                 }
+                
             });
+            this.arrayDetalle.forEach((detalle, index) => {
+                if(detalle.cantidad <= 0) {
+                    art = detalle.nombre_ropa + " No colocar cantidades negativas";
+                    console.log("error ", art)
+                    me.errorMostrarMsjVenta.push(art);
+                }
+                
+            });
+
+            
             if (!this.evento) this.errorMostrarMsjVenta.push("El nombre del evento no puede estar vacío.");
             if (me.errorMostrarMsjVenta.length) me.errorVenta = 1;
             return me.errorVenta;

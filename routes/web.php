@@ -102,11 +102,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/entradaRopa/registrar', 'EntradaRopacontroller@store');
         Route::get('/entradaRopa', 'EntradaRopaController@index');
         Route::put('/entradaRopa/actualizar', 'EntradaRopaController@update');
+        Route::get('/entradaRopa/imprimir', 'EntradaRopaController@imprimirDonacion');
+
         //Route::delete('/entradaRopa/eliminar/{id}/idRopa/{idRopa}','EntradaRopaController@eliminar');
 
         Route::get('/entradaProducto', 'EntradaProductocontroller@index');
         Route::post('/entradaProducto/registrar', 'EntradaProductoController@store');
         Route::put('/entradaProducto/actualizar', 'EntradaProductoController@update');
+        Route::get('/entradaProducto/imprimir', 'EntradaProductoController@imprimirDonacion');
+
         //Route::delete('/entradaProducto/eliminar/{id}/idProducto/{idProducto}', 'EntradaProductoController@eliminar');
         Route::get('/salidaProductos', 'SalidaProductosController@index');
         Route::get('/salidaProductos/obtenerCabecera', 'SalidaProductosController@obtenerCabecera');
@@ -128,6 +132,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/eventos/registrar', 'EventosController@store');
         Route::put('/eventos/actualizar', 'EventosController@update');
         Route::get('/eventos/selectCategoria', 'EventosController@selectEvento');
+
+        Route::get('/factura/imprimir/{id}', 'SalidaProductosController@imprimirTicket');
+        Route::get('/facturaR/imprimir/{id}', 'SalidaRopasController@imprimirTicket');
+
+
 
 
 

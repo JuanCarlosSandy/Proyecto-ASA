@@ -19,6 +19,9 @@
                             </select>
                             <input type="text" v-model="buscar" @keyup.enter="listarProducto(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                             <button type="submit" @click="listarProducto(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                            <button type="button" @click="pdfVenta()" class="btn btn-info btn-sm">
+                                            <i class="icon-doc"></i>
+                                            </button>
                         </div>
                     </div>
                 </div>
@@ -214,6 +217,17 @@ computed:{
     }
 },
 methods : {
+    pdfVenta(){
+            axios.get('/entradaRopa/imprimir', { responseType: 'blob' })
+                .then(function(response) {
+                window.location.href = "docs/entradaRopa.pdf";
+                console.log("Se generó el PDF correctamente");
+                })
+                .catch(function(error) {
+                console.log(error);
+                });
+            },
+
     listarProducto (page,buscar,criterio){
         let me=this;
         var url= '/entradaRopa?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;

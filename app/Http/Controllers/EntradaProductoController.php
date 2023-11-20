@@ -9,6 +9,9 @@ use App\Producto;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use FPDF;
+use Carbon\Carbon;
+
 class EntradaProductoController extends Controller
 {
     public function index(Request $request)
@@ -132,5 +135,101 @@ class EntradaProductoController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'No se pudo eliminar el producto'], 500);
         }
+    }
+
+    public function imprimirDonacion()
+    {
+        $venta = DB::table('entrada_productos')
+            ->join('productos', 'entrada_productos.idProducto', '=', 'productos.id')
+            ->join('donadores', 'entrada_productos.idDonador', '=', 'donadores.id')
+            ->join('personas', 'donadores.idPersona', '=', 'personas.id')
+            ->join('categoria_alimentos', 'productos.idCategoria_Alimentos', '=', 'categoria_alimentos.id')            
+            ->select(
+                'productos.nombre_producto',
+                'productos.id as idProducto',
+                'entrada_productos.id as idEntradaProducto', 
+                'donadores.idPersona', 
+                'personas.nombre',
+                'categoria_alimentos.tipo_producto as categoria',
+                'entrada_productos.cantidad',
+                'entrada_productos.created_at'
+            )
+            ->orderBy('entrada_productos.id','desc')
+            ->get();
+
+            $pdf = new FPDF();
+            $fechaActual = now()->setTimezone('America/La_Paz');
+            
+            $pdf->AddPage('P', 'Letter');
+            $pdf->SetMargins(10, 10, 10);
+            $pdf->SetAutoPageBreak(true, 10);
+        
+            $rutaImagen = public_path('img\logoasagrande.png');
+            $pdf->Image($rutaImagen, $pdf->GetPageWidth() - 50, 10, 40);
+        
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(0, 10, 'REPORTE DE DONACION', 0, 1, 'C');
+            $pdf->Cell(0, 10, "Fecha: $fechaActual", 0, 1, 'C');
+        
+            $mitadAnchoPagina = $pdf->GetPageWidth() / 2;
+            
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->Cell($mitadAnchoPagina - 10, 10, '', 0, 1, 'C', true);
+            $pdf->Cell($mitadAnchoPagina - 10, 10, '', 0, 1, 'C', true);
+        
+            $anchoColumnaDonador = 50;
+            $anchoColumnaProducto = 30;
+            $anchoColumnaCategoria = 30;
+            $anchoColumnaFecha = 40;
+            $anchoColumnaCantidad = 30;
+        
+            $anchoTabla = $anchoColumnaDonador + $anchoColumnaProducto + $anchoColumnaCategoria + $anchoColumnaFecha + $anchoColumnaCantidad;
+            $centrarHorizontal = ($pdf->GetPageWidth() - $anchoTabla) / 2;
+            
+            $pdf->SetX($centrarHorizontal);
+        
+            $pdf->SetFillColor(184, 134, 11);
+            $pdf->SetTextColor(255, 255, 255);
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell($anchoColumnaDonador, 10, 'Donador', 1, 0, 'C', true);
+            $pdf->Cell($anchoColumnaProducto, 10, 'Producto', 1, 0, 'C', true);
+            $pdf->Cell($anchoColumnaCategoria, 10, 'Categoria', 1, 0, 'C', true);
+            $pdf->Cell($anchoColumnaFecha, 10, 'Fecha Registro', 1, 0, 'C', true);
+            $pdf->Cell($anchoColumnaCantidad, 10, 'Cantidad', 1, 1, 'C', true);
+        
+            $pdf->SetDrawColor(255, 255, 255);
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->SetTextColor(0, 0, 0);
+        
+            foreach ($venta as $detalle) {
+                $donador = $detalle->nombre;
+                $cantidad = $detalle->cantidad;
+                $nombreArticulo = $detalle->nombre_producto;
+                $categoria = $detalle->categoria;
+                $fechadonacion = Carbon::parse($detalle->created_at)->format('Y-m-d');
+        
+                $pdf->SetX($centrarHorizontal);
+                $pdf->Cell($anchoColumnaDonador, 10, $donador, 1);
+                $pdf->Cell($anchoColumnaProducto, 10, $nombreArticulo, 1);
+                $pdf->Cell($anchoColumnaCategoria, 10, $categoria, 1);
+                $pdf->Cell($anchoColumnaFecha, 10, $fechadonacion, 1);
+                $pdf->Cell($anchoColumnaCantidad, 10, $cantidad, 1, 1);
+            }
+        
+            $pdf->SetX($centrarHorizontal + $anchoColumnaDonador + $anchoColumnaProducto + $anchoColumnaCategoria);
+            $totalP = $venta->sum('cantidad');
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell($anchoColumnaFecha, 10, 'Total de productos:', 0, 0, 'R');
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->Cell($anchoColumnaCantidad, 10, $totalP, 0, 1, 'L');
+        
+            $pdf->Cell($mitadAnchoPagina - 10, 18, '', 0, 1, 'C', true);
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(0, 10, "Dios te bendiga :)", 0, 1, 'C');
+        
+            $pdfPath = public_path('docs/entrada.pdf');
+            $pdf->Output($pdfPath, 'F');
+            return response()->download($pdfPath);
     }
 }

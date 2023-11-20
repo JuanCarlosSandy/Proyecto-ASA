@@ -8,10 +8,7 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Donar
-                    <button type="button" @click="mostrarDetalle()" class="btn btn-secondary">
-                        <i class="icon-plus"></i>&nbsp;Nuevo
-                    </button>
+                    <i class="fa fa-align-justify"></i> Reporte Donaciones
                 </div>
                 <!-- Listado-->
                 <template v-if="listado == 1">
@@ -23,7 +20,7 @@
                                         <option value="nombre_evento">Evento</option>
                                         <option value="fecha_hora">Fecha-Hora</option>
                                     </select>
-                                    <input type="text" v-model="buscar" @keyup="listarVenta(1, buscar, criterio)"
+                                    <input type="text" v-model="buscar" @keyup="manejarKeyUp(1, buscar, criterio)"
                                         class="form-control" placeholder="Texto a buscar">
                                     <!--button type="submit" @click="listarVenta(1, buscar, criterio)" class="btn btn-primary"><i
                                             class="fa fa-search"></i> Buscar</button-->
@@ -50,6 +47,67 @@
                                                 class="btn btn-success btn-sm">
                                                 <i class="icon-eye"></i>
                                             </button> &nbsp;
+
+                                            <button type="button" @click="pdfVenta(venta.id)" class="btn btn-info btn-sm">
+                                            <i class="icon-doc"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item" v-if="pagination.current_page > 1">
+                                    <a class="page-link" href="#"
+                                        @click.prevent="cambiarPagina(pagination.current_page - 1, buscar, criterio)">Ant</a>
+                                </li>
+                                <li class="page-item" v-for="page in pagesNumber" :key="page"
+                                    :class="[page == isActived ? 'active' : '']">
+                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(page, buscar, criterio)"
+                                        v-text="page"></a>
+                                </li>
+                                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                                    <a class="page-link" href="#"
+                                        @click.prevent="cambiarPagina(pagination.current_page + 1, buscar, criterio)">Sig</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+<!--fin de listado productos-->
+<!--inicio de listado ropa-->
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label>ROPAS</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Evento</th>
+                                        <th>Fecha Hora</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="venta in arrayVentaR" :key="venta.id">
+                                        <td v-text="venta.usuario"></td>
+                                        <td v-text="venta.evento"></td>
+                                        <td v-text="venta.fecha_hora"></td>
+                                        <td>
+                                            <button type="button" @click="verVentaR(venta.id)"
+                                                class="btn btn-success btn-sm">
+                                                <i class="icon-eye"></i>
+                                            </button> &nbsp;
+
+                                            <button type="button" @click="pdfVentaR(venta.id)" class="btn btn-info btn-sm">
+                                            <i class="icon-doc"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -74,122 +132,8 @@
                         </nav>
                     </div>
                 </template>
-                <!--Fin Listado-->
-                <!-- Detalle-->
-                <template v-else-if="listado == 0">
-                    <div class="card-body">
-                        <div class="form-group row border">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                <label for="nombre_evento"><strong>Categoria</strong></label>
-                                <select id="evento" v-model="evento" class="form-control">
-                                    <option value="" disabled>Selecciona un Evento</option>
-                                    <option v-for="categorias in arrayCategorias" :key="categorias.id" :value="categorias.id">{{ categorias.nombre_evento }}</option>
-                                </select>
-                        </div>
-                            </div>
-                            
-                            <div class="col-md-12">
-                                <div v-show="errorVenta" class="form-group row div-error">
-                                    <div class="text-center text-error">
-                                        <div v-for="error in errorMostrarMsjVenta" :key="error" v-text="error">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group row border">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Producto <span style="color: red;" v-show="idarticulo == 0">(*Seleccione Producto)</span></label>
-                                    <div class="form-inline">
-                                        <input type="text" class="form-control" v-model="codigo" ref="articuloRef"
-                                            @keyup="buscarArticulo()" placeholder="Codigo del producto">
-                                        <button @click="abrirModal()" class="btn btn-primary">...</button>
-                                        <input type="text" id="nombre_producto" readonly class="form-control"
-                                            v-model="articulo">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <input type="hidden" id="codigo" class="form-control" v-model="codigo" readonly>
-
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    <label>Cantidad <span style="color: red;" v-show="cantidad == 0"></span></label>
-                                    <input type="number" id="cantidad" value="0" class="form-control" v-model="cantidad" min="0"
-                                        ref="cantidadRef">
-                                </div>
-                            </div>
-                           
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <button @click="agregarDetalle()" class="btn btn-success form-control btnagregar"><i
-                                            class="icon-plus"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="form-group row border">
-                            <div class="table-responsive col-md-12">
-                                <table class="table table-bordered table-striped table-sm">
-                                    <thead>
-                                        <tr>
-
-                                            <th>Producto</th>
-                                            <th>Categoria</th>
-                                            <th>Cantidad</th>
-                                            <th>Opciones</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="arrayDetalle.length">
-                                        <tr v-for="(detalle, index) in arrayDetalle" :key="detalle.id">
-                                            
-                                            <td v-text="detalle.articulo"></td>
-                                            <td v-text="detalle.categoria"></td>
-
-                                            <td>
-                                                <span style="color:red;" v-show="detalle.cantidad > detalle.cantidad">Stock:
-                                                    {{ detalle.cantidad }}</span>
-                                                <input v-model="detalle.cantidad" type="number" class="form-control">
-                                            </td>   
-                                            <td>
-                                                <button @click="eliminarDetalle(index)" type="button"
-                                                    class="btn btn-danger btn-sm">
-                                                    <i class="icon-close"></i>
-                                                </button>
-                                            </td>
-
-                                        </tr>
-
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr>
-                                            <td colspan="6">
-                                                No hay articulos agregados
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-12">
-                                <button type="button" @click="ocultarDetalle()" class="btn btn-secondary">Cerrar</button>
-                                <button type="button" class="btn btn-primary" @click="registrar()">Registrar
-                                    Donacion</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </template>
-                <!-- Fin Detalle-->
+                <!--Fin Listado prducto y ropa-->
+               
                 <!--Ver ingreso-->
                 <template v-else-if="listado == 2">
                     <div class="card-body">
@@ -236,81 +180,64 @@
                         </div>
                     </div>
                 </template>
+                <!--fin detalle donacion productos-->
+                <!--detalle donacion ropa-->
+                <template v-else-if="listado == 3">
+                    <div class="card-body">
+                        <div class="form-group row border">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="">Eventito</label>
+                                    <p v-text="evento"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row border">
+                            <div class="table-responsive col-md-12">
+                                <table class="table table-bordered table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Ropa</th>
+                                            <th>Cantidad</th>
+                                            <th>Talla</th>
+                                            <th>Sexo</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="arrayDetalleR.length">
+                                        <tr v-for="detalle in arrayDetalleR" :key="detalle.id">
+                                            <td v-text="detalle.nombre_ropa">
+                                            </td>
+                                            <td v-text="detalle.cantidad">
+                                            </td>
+                                            <td v-text="detalle.talla">
+                                            </td>
+                                            <td v-text="detalle.sexo">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="5">
+                                                No hay articulos agregados
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button type="button" @click="ocultarDetalle()" class="btn btn-secondary">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
                 <!--Fin ver ingreso-->
             </div>
             <!-- Fin ejemplo de tabla Listado -->
         </div>
-
-        <div class="modal fade" tabindex="-1" :class="{ 'mostrar': modal }" role="dialog" aria-labelledby="myModalLabel"
-            style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-primary modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" v-text="tituloModal"></h4>
-                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <select class="form-control col-md-3" v-model="criterioA">
-                                        <option value="nombre_producto">Nombre</option>      
-                                        <option value="id">Código</option>
-                                    </select>
-                                    <input type="text" v-model="buscarA" @keyup="listarArticulo(buscarA, criterioA)"
-                                        class="form-control" placeholder="Texto a buscar">
-                                    <!--button type="submit" @click="listarArticulo(buscarA, criterioA)"
-                                        class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button-->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-sm">
-                                <thead>
-                                    <tr>
-
-                                        <th>Código</th>
-                                        <th>Nombre</th>
-                                        <th>Categoría</th>
-                                        <th>Stock</th>
-                                        <th>Opciones</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="articulo in arrayArticulo" :key="articulo.id">
-                                        
-                                        <td v-text="articulo.id"></td>
-                                        <td v-text="articulo.nombre_producto"></td>
-                                        <td v-text="articulo.nombre_categoria"></td>
-                                        <td v-text="articulo.cantidad"></td>
-                                        <td>
-                                            <button type="button" @click="agregarDetalleModal(articulo)"
-                                                class="btn btn-success btn-sm">
-                                                <i class="icon-check"></i>
-                                            </button>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion == 1" class="btn btn-primary"
-                            @click="registrarPersona()">Guardar</button>
-                        <button type="button" v-if="tipoAccion == 2" class="btn btn-primary"
-                            @click="actualizarPersona()">Actualizar</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        
         <!--Fin del modal-->
     </main>
 </template>
@@ -326,7 +253,9 @@ export default {
             complemento_id: '',
             evento : 0,
             arrayVenta: [],
+            arrayVentaR: [],
             arrayDetalle: [],
+            arrayDetalleR: [],
             arrayProductos: [],
             arrayCategorias : [],
             listado: 1,
@@ -412,39 +341,32 @@ export default {
 
         },
 
+        manejarKeyUp(page, buscar, criterio) {
+        this.listarVenta(page, buscar, criterio);
+        this.listarVentaR(page, buscar, criterio);
+        },
+        
+        pdfVenta(id){
+            axios.get('/factura/imprimir/'+id, { responseType: 'blob' })
+                .then(function(response) {
+                window.location.href = "docs/donacion.pdf";
+                console.log("Se generó el PDF correctamente");
+                })
+                .catch(function(error) {
+                console.log(error);
+                });
+            },
 
-        cuis() {
-            axios.post('/venta/cuis')
-                .then(function (response) {
-                    if (response.data.RespuestaCuis.transaccion === false) {
-                        document.getElementById("cuis").innerHTML = "CUIS: " + response.data.RespuestaCuis.codigo;
-                        document.getElementById("cuis").className = "badge bg-primary";
-                    } else {
-                        document.getElementById("cuis").innerHTML = "CUIS: Inexistente";
-                        document.getElementById("cuis").className = "badge bg-secondary";
-                    }
+        pdfVentaR(id){
+            axios.get('/facturaR/imprimir/'+id, { responseType: 'blob' })
+                .then(function(response) {
+                window.location.href = "docs/donacionRopa.pdf";
+                console.log("Se generó el PDF correctamente");
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(function(error) {
+                console.log(error);
                 });
-        },
-        cufd() {
-            axios.post('/venta/cufd')
-                .then(function (response) {
-                    if (response.data.transaccion != false) {
-                        document.getElementById("cufd").innerHTML = "CUFD vigente: " + response.data.fechaVigencia.substring(0, 16);
-                        document.getElementById("direccion").innerHTML = response.data.direccion;
-                        document.getElementById("cufdValor").innerHTML = response.data.codigo;
-                        document.getElementById("cufd").className = "badge bg-info";
-                    } else {
-                        document.getElementById("cufd").innerHTML = "No existe CUFD vigente";
-                        document.getElementById("cufd").className = "badge bg-secondary";
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
+            },
 
         listarVenta(page, buscar, criterio) {
             let me = this;
@@ -452,6 +374,20 @@ export default {
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 me.arrayVenta = respuesta.ventas.data;
+                me.pagination = respuesta.pagination;
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        listarVentaR(page, buscar, criterio) {
+            let me = this;
+            console.log("estas entrando al metodo listar venta")
+            var url = '/salidaRopas?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+            axios.get(url).then(function (response) {
+                var respuesta = response.data;
+                me.arrayVentaR = respuesta.ventas.data;
                 me.pagination = respuesta.pagination;
             })
                 .catch(function (error) {
@@ -572,39 +508,7 @@ export default {
             }
 
         },
-        agregarDetalleModal(data = []) {
-            let me = this;
-            if (me.encuentra(data['id'])) {
-                swal({
-                    type: 'error',
-                    title: 'Error...',
-                    text: 'Este Artículo ya se encuentra agregado!',
-                })
-            } else {
-                me.arrayDetalle.push({
-                    idarticulo: data['id'],
-                    articulo: data['nombre_producto'],
-                    categoria : data['nombre_categoria'],
-                    cantidad: data['cantidad']
-                });
-                me.arrayCantidadOriginal.push({
-                            cantidad: data['cantidad'],
-                        });
-            }
-            me.buscarA = '';
-        },
 
-        listarArticulo(buscar, criterio) {
-            let me = this;
-            var url = '/producto/listarProductoVenta?buscar=' + buscar + '&criterio=' + criterio;
-            axios.get(url).then(function (response) {
-                var respuesta = response.data;
-                me.arrayArticulo = respuesta.articulos.data;
-            })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
 
         obtenerDatosUsuario() {
             axios.get('/salidaProductos')
@@ -628,88 +532,10 @@ export default {
                 console.log(error);
             });
             },
-
-        registrar() {
-            this.registrarVenta();
-            
-        },
-
-        registrarVenta() {
-            if (this.validarVenta()) {
-                return;
-            }
-
-            let me = this;
-
-            axios.post('/salidaProductos/registrar', {
-                'evento': this.evento,
-                'data': this.arrayDetalle
-
-            }).then(function (response) {
-                //console.log(response.data.id);
-                if (response.data.id > 0) {
-                    me.listarVenta(1, this.buscar, this.criterio);
-                    me.evento = '';
-                    me.idarticulo = 0;
-                    me.cantidad = 0;
-                    me.arrayDetalle = [];
-                    //window.open('/factura/imprimir/' + response.data.id);
-                }
-
-            }).catch(function (error) {
-                console.log(error);
-            });
-            me.listarVenta(1, this.buscar, this.criterio);
-            this.listado = 1;
-        },
         
-        getAlmacenProductos(almacen) {
-            let me = this;
-            me.idAlmacen = almacen.id;
-            console.log(me.idAlmacen);
-        },
-
-        validarVenta() {
-            let me = this;
-            me.errorVenta = 0;
-            me.errorMostrarMsjVenta = [];
-            let art;
-
-            this.arrayDetalle.forEach((detalle, index) => {
-                if (detalle.cantidad > this.arrayCantidadOriginal[index].cantidad) {
-                    art = detalle.articulo + " cantidad insuficiente";
-                    
-                    console.log("error ", art)
-                    me.errorMostrarMsjVenta.push(art);
-                }
-            });
-            this.arrayDetalle.forEach((detalle, index) => {
-                if(detalle.cantidad <= 0) {
-                    art = detalle.articulo + " No colocar cantidades negativas";
-                    console.log("error ", art)
-                    me.errorMostrarMsjVenta.push(art);
-                }
-                
-            });
-            if (!this.evento) this.errorMostrarMsjVenta.push("El nombre del evento no puede estar vacío.");
-            if (me.errorMostrarMsjVenta.length) me.errorVenta = 1;
-            return me.errorVenta;
-        },
-
-
-        mostrarDetalle() {
-            let me = this;
-            me.listado = 0;
-
-            me.evento = '';
-            me.idarticulo = 0;
-            me.articulo = '';
-            me.cantidad = 0;
-            me.arrayDetalle = [];
-        },
-
         ocultarDetalle() {
-            this.listarVenta(1, this.buscar, this.criterio);
+            this.listarVenta(1, this.buscar, this.criterio);            
+            this.listarVentaR(1, this.buscar, this.criterio);
             this.listado = 1;
         },
 
@@ -745,6 +571,40 @@ export default {
                     console.log(error);
                 });
         },
+
+        verVentaR(id) {
+            let me = this;
+            me.listado = 3;
+
+            //Obtener datos del ingreso
+            var arrayVentaR = [];
+            var url = '/salidaRopas/obtenerCabecera?id=' + id;
+
+            axios.get(url).then(function (response) {
+                var respuesta = response.data;
+                arrayVentaR = respuesta.venta;
+
+                me.usuario = arrayVentaR[0]['usuario'];
+                me.evento = arrayVentaR[0]['evento'];
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            //obtener datos de los detalles
+            var url = '/salidaRopas/obtenerDetalles?id=' + id;
+
+            axios.get(url).then(function (response) {
+                //console.log(response);
+                var respuesta = response.data;
+                me.arrayDetalleR = respuesta.detalles;
+
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
         cerrarModal() {
             this.modal = 0;
             this.tituloModal = '';
@@ -762,6 +622,7 @@ export default {
 
     mounted() {
         this.listarVenta(1, this.buscar, this.criterio);
+        this.listarVentaR(1, this.buscar, this.criterio);
         window.addEventListener('keydown', this.atajoButton);
         this.obtenerDatosUsuario();
         this.obtenerDatosCategoria();
